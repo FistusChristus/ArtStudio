@@ -1,0 +1,59 @@
+﻿@page "/login"
+
+@using ArtStudio.Models
+@using ArtStudio.Services
+
+@inject NavigationManager NavigationManager
+@inject JSRuntimeService JSRuntimeService
+<div class="container">
+    <div class="row">
+        <div class="col-lg-10 col-xl-9 mx-auto">
+            <div class="card card-signin flex-row my-5">
+                <div class="card-img-left d-none d-md-flex">
+                    <!-- Background image for card set in CSS! -->
+                </div>
+                <div class="card-body">
+                    <h5 class="card-title text-center">Вход</h5>
+                    <div class="form-signin">
+
+                        <div class="form-label-group">
+                            <input type="email" id="inputEmail" @bind-value="@loginModel.Email" class="form-control" placeholder="Email" required>
+                            <label for="inputEmail">Введите Email</label>
+                        </div>
+
+                        <hr>
+
+                        <div class="form-label-group">
+                            <input type="password" id="inputPassword" @bind-value="@loginModel.Password" class="form-control" placeholder="Пароль" required>
+                            <label for="inputPassword">Ведите пароль</label>
+                        </div>
+
+
+                        <button class="btn btn-lg btn-primary btn-block text-uppercase" @onclick="LoginRequest">Вход</button>
+                        <a class="d-block text-center mt-2 small" href="/register">Нет аккаунта? Регистрация</a>
+                        <hr class="my-4">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+@code{
+
+    public LoginModel loginModel = new LoginModel() { Email = "kashperuk99@gmail.com", Password = "!Q2w3e4r5t" };
+
+    public async void LoginRequest()
+    {
+        if (!String.IsNullOrEmpty(loginModel.Email) && !String.IsNullOrEmpty(loginModel.Password))
+        {
+            var result = await JSRuntimeService.InvokeScript("SendRequest", new { type = "post", url = "/api/user/login", data = loginModel, contentType = "application/json" });
+            if (result.status)
+            {
+                NavigationManager.NavigateTo("/", true);
+            }
+        }
+    }
+}

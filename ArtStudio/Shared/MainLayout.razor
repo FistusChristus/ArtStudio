@@ -1,0 +1,114 @@
+﻿@inherits LayoutComponentBase
+@using ArtStudio.Services
+@inject JSRuntimeService JSRuntimeService
+@inject NavigationManager NavigationManager
+@using MudBlazor
+
+<MudLayout Class="leyaout">
+    <MudAppBar Elevation="1" Dense="true" Fixed="true">
+        <MudIconButton Icon="@Icons.Material.Filled.ArrowBackIos" Color="Color.Inherit" Edge="Edge.Start" Class="@rotate" OnClick="@ToggleDrawer" />
+        <MudAppBarSpacer />
+        @*<MudIconButton Icon="@Icons.Custom.Brands.GitHub" Color="Color.Inherit" Link="https://github.com/Garderoben/MudBlazor" Target="_blank" />*@
+        <div class="ml-auto d-flex">
+
+
+            <AuthorizeView>
+                <NotAuthorized>
+                    <MudButton Variant="Variant.Filled" Size="Size.Small" Class="m-1" Link="login" Color="Color.Primary">Вход</MudButton>
+                    <MudAppBarSpacer />
+                    <MudButton Variant="Variant.Filled" Size="Size.Small" Class="m-1" Link="register" Color="Color.Secondary">Регистрация</MudButton>
+                    <MudAppBarSpacer />
+                </NotAuthorized>
+                <Authorized>
+                    <MudBadge Content="5" Color="Color.Primary" Overlap="true" Bottom="true" Class="mx-6 my-4">
+                        <NavLink href="cart">
+                            <MudIcon Icon="@Icons.Material.Filled.ShoppingCart" Color="Color.Primary" />
+                        </NavLink>
+                    </MudBadge>
+                    <MudButton @onclick="LogOut" Class="m-1" Size="Size.Small" Variant="Variant.Filled" Color="Color.Primary">Выход</MudButton>
+                </Authorized>
+            </AuthorizeView>
+        </div>
+
+    </MudAppBar>
+    <MudDrawer Class="sidebar-bg" @bind-Open="@open" Elevation="1">
+        <MudNavMenu Style="color:white;">
+            <div class="mb-2">
+                <img src="/img/Logo.jpg" style="width:100%" />
+            </div>
+
+            <AuthorizeView>
+                <Authorized>
+                    <div class="text-center">@context.User.Identity.Name</div>
+                    <div class="ca-d-flex ca-d-center m-2">
+                        <MudAvatar Color="Color.Primary" Class="ca-avatar-80">@context.User.Identity.Name[0]</MudAvatar>
+                    </div>
+                </Authorized>
+            </AuthorizeView>
+
+            <MudNavLink Href="/">Главная</MudNavLink>
+            <MudNavGroup Title="Категории" Expanded="true">
+                <MudNavLink Href="/video">Видео</MudNavLink>
+                <MudNavLink Href="/image">Фото</MudNavLink>
+            </MudNavGroup>
+            <MudNavLink Href="/about">О нас</MudNavLink>
+        </MudNavMenu>
+    </MudDrawer>
+    <MudMainContent Class="">
+        <MudContainer Style="padding:0!important; margin:48px 0 0 0 !important">
+            @Body
+        </MudContainer>
+    </MudMainContent>
+</MudLayout>
+
+<MudThemeProvider Theme="SWPO"></MudThemeProvider>
+<MudDialogProvider></MudDialogProvider>
+<MudSnackbarProvider></MudSnackbarProvider>
+
+@code{
+    MudTheme SWPO = new MudTheme()
+    {
+        Palette = new Palette()
+        {
+            Primary = "#9184EF",
+            Secondary = "#4A5665",
+            AppbarBackground = "#21272F",
+            DrawerBackground = "#21272F",
+            TextPrimary = "#ffffff",
+            Divider = "#ffffff",
+
+
+        },
+
+        LayoutProperties = new LayoutProperties()
+        {
+            AppbarMinHeight = "0",
+            DrawerWidthLeft = "260px",
+            DrawerWidthRight = "300px"
+        },
+
+        ZIndex = new ZIndex()
+        {
+
+        }
+
+    };
+
+    bool open = false;
+    string rotate = "t-3";
+
+    void ToggleDrawer()
+    {
+        open = !open;
+        rotate = open ? "rotate-180 t-3" : "t-3";
+    }
+
+    public async void LogOut()
+    {
+        var result = await JSRuntimeService.InvokeScript("SendRequest", new { type = "post", url = "/api/user/logout", data = "", contentType = "application/json" });
+        if (result.status)
+        {
+            NavigationManager.NavigateTo("/", true);
+        }
+    }
+}

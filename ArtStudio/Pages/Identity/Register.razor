@@ -1,0 +1,63 @@
+﻿@page "/register"
+@using ArtStudio.Models
+@using ArtStudio.Services
+
+@inject JSRuntimeService JSRuntimeService
+@inject NavigationManager NavigationManager
+
+<div class="container">
+    <div class="row">
+        <div class="col-lg-10 col-xl-9 mx-auto">
+            <div class="card card-signin flex-row my-5">
+                <div class="card-img-left d-none d-md-flex">
+                    <!-- Background image for card set in CSS! -->
+                </div>
+                <div class="card-body">
+                    <h5 class="card-title text-center">Регистрация</h5>
+                    <div class="form-signin">
+
+                        <div class="form-label-group">
+                            <input type="email" id="inputEmail" @bind-value="@registerModel.Email" class="form-control" placeholder="Email" required>
+                            <label for="inputEmail">Введите Email</label>
+                        </div>
+
+                        <hr>
+
+                        <div class="form-label-group">
+                            <input type="password" id="inputPassword" @bind-value="@registerModel.Password" class="form-control" placeholder="Пароль" required>
+                            <label for="inputPassword">Ведите пароль</label>
+                        </div>
+
+                        <div class="form-label-group">
+                            <input type="password" id="inputConfirmPassword" @bind-value="@registerModel.ConfirmPassword" class="form-control" placeholder="Пароль" required>
+                            <label for="inputConfirmPassword">Подтвердите пароль</label>
+                        </div>
+
+                        <button class="btn btn-lg btn-primary btn-block text-uppercase" @onclick="RegisterRequest">Регистрация</button>
+                        <a class="d-block text-center mt-2 small" href="/login">Есть аккаунт? Войти</a>
+                        <hr class="my-4">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+@code{
+    public RegisterModel registerModel = new RegisterModel() { ConfirmPassword = "!Q2w3e4r5t", Email = "kashperuk99@gmail.com", Password = "!Q2w3e4r5t" };
+
+
+    public async void RegisterRequest()
+    {
+        if (!String.IsNullOrEmpty(registerModel.ConfirmPassword) && !String.IsNullOrEmpty(registerModel.Email) && !String.IsNullOrEmpty(registerModel.Password))
+        {
+            var result = await JSRuntimeService.InvokeScript("SendRequest", new { type = "post", url = "/api/user/login", data = registerModel, contentType = "application/json" });
+            if (result.status)
+            {
+                NavigationManager.NavigateTo("/", true);
+            }
+        }
+    }
+}
