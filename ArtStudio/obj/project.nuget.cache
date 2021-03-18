@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "c9ZDuNMZJzyumjtlI6EmD3WzbKLU82o26I57b9cjoTrqQHNIDaXtmOSb1hC7ge64TApXsFo+UU4nTyb285QfpQ==",
+  "dgSpecHash": "xge7tWoZRZEU8L+gWJB0rPRXtk7wlSV37U8/3a29JvBdVIRrJfOkMUP/BdILJj699XjBZKo+KGrRlmasc9Qt8g==",
   "success": true,
-  "projectFilePath": "C:\\Users\\pervi\\source\\repos\\ArtStudio\\ArtStudio\\ArtStudio.csproj",
+  "projectFilePath": "C:\\Users\\pervi\\Desktop\\New folder\\SWPO\\ArtStudio\\ArtStudio.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\pervi\\.nuget\\packages\\humanizer.core\\2.8.26\\humanizer.core.2.8.26.nupkg.sha512",
     "C:\\Users\\pervi\\.nuget\\packages\\microsoft.aspnetcore.authorization\\3.1.12\\microsoft.aspnetcore.authorization.3.1.12.nupkg.sha512",

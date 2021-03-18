@@ -1,4 +1,5 @@
 function SendRequest(data) {
+    console.log(data);
     return $.ajax({
         type: data.type,
         url: data.url,

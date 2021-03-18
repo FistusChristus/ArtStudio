@@ -8,11 +8,11 @@ namespace ArtStudio.Models
     public class Response
     {
         public string error { get; set; }
-        public bool status { get; set; }
+        public bool isSuccess { get; set; }
         public object data { get; set; }
-        public Response(bool status, object data =null, string error=null)
+        public Response(bool isSuccess, object data =null, string error=null)
         {
-            this.status = status;
+            this.isSuccess = isSuccess;
             this.data = data;
             this.error = error;
         }

@@ -22,6 +22,7 @@ namespace ArtStudio.Models
     {
         public string URL { get; set; }
         public string Resolution { get; set; }
+        public string Size { get; set; }
         public string Tags { get; set; }
         public double Price { get; set; }
         Category Category { get; set; }

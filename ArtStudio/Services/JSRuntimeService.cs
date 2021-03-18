@@ -1,5 +1,6 @@
 ﻿using ArtStudio.Models;
 using Microsoft.AspNetCore.Components;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.JSInterop;
 using System;
@@ -14,11 +15,9 @@ namespace ArtStudio.Services
 
     public class JSRuntimeService
     {
-        private readonly ApplicationDBContext dbContext;
         private readonly IJSRuntime JSRuntime;
-        public JSRuntimeService(ApplicationDBContext applicationDBContext, IJSRuntime JSRuntime)
+        public JSRuntimeService(IJSRuntime JSRuntime)
         {
-            dbContext = applicationDBContext;
             this.JSRuntime = JSRuntime;
         }
 

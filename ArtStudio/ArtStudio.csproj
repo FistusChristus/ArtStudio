@@ -24,7 +24,7 @@
   <ItemGroup>
     <Folder Include="Pages\Categories\" />
     <Folder Include="Pages\Videos\" />
-    <Folder Include="Pages\Sections\" />
+    <Folder Include="Pages\Resources\" />
     <Folder Include="Pages\Photos\" />
   </ItemGroup>
 

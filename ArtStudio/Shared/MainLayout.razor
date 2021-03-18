@@ -3,20 +3,26 @@
 @inject JSRuntimeService JSRuntimeService
 @inject NavigationManager NavigationManager
 @using MudBlazor
+@using ArtStudio.Models
 
 <MudLayout Class="leyaout">
     <MudAppBar Elevation="1" Dense="true" Fixed="true">
         <MudIconButton Icon="@Icons.Material.Filled.ArrowBackIos" Color="Color.Inherit" Edge="Edge.Start" Class="@rotate" OnClick="@ToggleDrawer" />
+        <div class="@HeaderToggleClass"><span class="header_brand">@HeaderBrand</span></div>
         <MudAppBarSpacer />
         @*<MudIconButton Icon="@Icons.Custom.Brands.GitHub" Color="Color.Inherit" Link="https://github.com/Garderoben/MudBlazor" Target="_blank" />*@
-        <div class="ml-auto d-flex">
+        <div class="ml-auto d-flex" style="align-items:center">
 
 
             <AuthorizeView>
                 <NotAuthorized>
-                    <MudButton Variant="Variant.Filled" Size="Size.Small" Class="m-1" Link="login" Color="Color.Primary">Вход</MudButton>
+                    <div class="d-flex justify-content-center align-items-center">
+                        <a href="/login" class="shine-button primary-button button-small mr-2">Вход</a>
+                    </div>
                     <MudAppBarSpacer />
-                    <MudButton Variant="Variant.Filled" Size="Size.Small" Class="m-1" Link="register" Color="Color.Secondary">Регистрация</MudButton>
+                    <div class="d-flex justify-content-center align-items-center">
+                        <a href="/register" class="shine-button button-small">Регистрация</a>
+                    </div>
                     <MudAppBarSpacer />
                 </NotAuthorized>
                 <Authorized>
@@ -25,17 +31,19 @@
                             <MudIcon Icon="@Icons.Material.Filled.ShoppingCart" Color="Color.Primary" />
                         </NavLink>
                     </MudBadge>
-                    <MudButton @onclick="LogOut" Class="m-1" Size="Size.Small" Variant="Variant.Filled" Color="Color.Primary">Выход</MudButton>
+                    <div class="d-flex justify-content-center align-items-center">
+                        <a href="/" @onclick="LogOut" class="shine-button button-small">Выход</a>
+                    </div>
                 </Authorized>
             </AuthorizeView>
         </div>
 
     </MudAppBar>
     <MudDrawer Class="sidebar-bg" @bind-Open="@open" Elevation="1">
-        <MudNavMenu Style="color:white;">
-            <div class="mb-2">
-                <img src="/img/Logo.jpg" style="width:100%" />
-            </div>
+        <MudNavMenu Style="color:white; font-family:Gilroy">
+            @*<div class="mb-2">
+                    <img src="/img/Logo.jpg" style="width:100%" />
+                </div>*@
 
             <AuthorizeView>
                 <Authorized>
@@ -43,8 +51,25 @@
                     <div class="ca-d-flex ca-d-center m-2">
                         <MudAvatar Color="Color.Primary" Class="ca-avatar-80">@context.User.Identity.Name[0]</MudAvatar>
                     </div>
+                    <div class="divider mt-2 ml-3 mr-3 "></div>
                 </Authorized>
             </AuthorizeView>
+
+
+            <div class="d-flex justify-content-center align-items-center big-btn-PD">
+                    <a href="/pricing"class="shine-button">Купить</a>
+            </div>
+            <AuthorizeView Policy="Admin">
+                <Authorized>
+                    <div class="d-flex justify-content-center align-items-center mt-2">
+                            <a href="/admin"class="shine-button primary-button big-btn-PD">Админ панель</a>
+                    </div>
+                </Authorized>
+            </AuthorizeView>
+
+            <div class="divider  mb-2 ml-3 mr-3 "></div>
+
+
 
             <MudNavLink Href="/">Главная</MudNavLink>
             <MudNavGroup Title="Категории" Expanded="true">
@@ -55,9 +80,9 @@
         </MudNavMenu>
     </MudDrawer>
     <MudMainContent Class="">
-        <MudContainer Style="padding:0!important; margin:48px 0 0 0 !important">
+        <div style="margin-top:48px;" class="d-flex">
             @Body
-        </MudContainer>
+        </div>
     </MudMainContent>
 </MudLayout>
 
@@ -66,6 +91,8 @@
 <MudSnackbarProvider></MudSnackbarProvider>
 
 @code{
+    public string HeaderBrand = "Sony World Photograpy Organization";
+    public string HeaderToggleClass = "";
     MudTheme SWPO = new MudTheme()
     {
         Palette = new Palette()
@@ -76,7 +103,8 @@
             DrawerBackground = "#21272F",
             TextPrimary = "#ffffff",
             Divider = "#ffffff",
-
+            PrimaryContrastText = "#ffffff",
+            SecondaryContrastText = "rgba(255, 255, 255, 0.7);"
 
         },
 
@@ -84,12 +112,17 @@
         {
             AppbarMinHeight = "0",
             DrawerWidthLeft = "260px",
-            DrawerWidthRight = "300px"
+            DrawerWidthRight = "300px",
+
+
         },
 
         ZIndex = new ZIndex()
         {
 
+        },
+        Typography = new Typography()
+        {
         }
 
     };
@@ -101,12 +134,14 @@
     {
         open = !open;
         rotate = open ? "rotate-180 t-3" : "t-3";
+        HeaderBrand = open ? "" : "Sony World Photograpy Organization";
+        HeaderToggleClass = open ? "slide-out-bck-left" : "slide-in-fwd-left";
     }
 
     public async void LogOut()
     {
-        var result = await JSRuntimeService.InvokeScript("SendRequest", new { type = "post", url = "/api/user/logout", data = "", contentType = "application/json" });
-        if (result.status)
+        Response result = await JSRuntimeService.InvokeScript("SendRequest", new { type = "post", url = "/api/user/logout", data = "", contentType = "application/json" });
+        if (result.isSuccess)
         {
             NavigationManager.NavigateTo("/", true);
         }

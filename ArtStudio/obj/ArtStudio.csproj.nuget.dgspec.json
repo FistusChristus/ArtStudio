@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\pervi\\source\\repos\\ArtStudio\\ArtStudio\\ArtStudio.csproj": {}
+    "C:\\Users\\pervi\\Desktop\\New folder\\SWPO\\ArtStudio\\ArtStudio.csproj": {}
   },
   "projects": {
-    "C:\\Users\\pervi\\source\\repos\\ArtStudio\\ArtStudio\\ArtStudio.csproj": {
+    "C:\\Users\\pervi\\Desktop\\New folder\\SWPO\\ArtStudio\\ArtStudio.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\pervi\\source\\repos\\ArtStudio\\ArtStudio\\ArtStudio.csproj",
+        "projectUniqueName": "C:\\Users\\pervi\\Desktop\\New folder\\SWPO\\ArtStudio\\ArtStudio.csproj",
         "projectName": "ArtStudio",
-        "projectPath": "C:\\Users\\pervi\\source\\repos\\ArtStudio\\ArtStudio\\ArtStudio.csproj",
+        "projectPath": "C:\\Users\\pervi\\Desktop\\New folder\\SWPO\\ArtStudio\\ArtStudio.csproj",
         "packagesPath": "C:\\Users\\pervi\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\pervi\\source\\repos\\ArtStudio\\ArtStudio\\obj\\",
+        "outputPath": "C:\\Users\\pervi\\Desktop\\New folder\\SWPO\\ArtStudio\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Microsoft\\Xamarin\\NuGet\\"

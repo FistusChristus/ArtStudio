@@ -20,8 +20,8 @@ namespace ArtStudio.Controllers.Identity
 
 
 
-        public UserController(UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager, 
-            SessionService sessionService )
+        public UserController(UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager,
+            SessionService sessionService)
         {
             this.userManager = userManager;
             this.signInManager = signInManager;

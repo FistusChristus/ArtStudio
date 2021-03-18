@@ -1,14 +1,14 @@
 ﻿
-<div class="@BgClass">
+<div class="@ContainerClass" style="width:@Width; height:@Height">
     <video muted="@Muted" src="@Src" type="@Type" autoplay="@Autoplay" loop="@Loop" controls="@Controls"  class="@Class" id="@Id"></video>
 </div>
 
 
 @code {
     [Parameter]
-    public string Src { get; set; }  
+    public string Src { get; set; }
     [Parameter]
-    public string BgClass { get; set; }
+    public string ContainerClass { get; set; }
     [Parameter]
     public string Type { get; set; }
     [Parameter]
@@ -36,6 +36,6 @@
         Autoplay = "autoplay";
         Loop = "loop";
         Controls = "controls";
-        BgClass = "backGround_blockInner";
+        ContainerClass = "backGround_blockInner";
     }
 }
