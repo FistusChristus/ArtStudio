@@ -42,6 +42,7 @@ namespace ArtStudio
             services.AddRazorPages();
             services.AddServerSideBlazor();
             services.AddMudServices();
+            services.AddControllersWithViews();
             services.AddControllers();
             services.AddDbContext<ApplicationDBContext>(options => options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
             services.AddIdentity<ApplicationUser, ApplicationRole>().AddEntityFrameworkStores<ApplicationDBContext>();
@@ -51,11 +52,14 @@ namespace ArtStudio
             services.AddTransient<RequestService>();
 
 
-            services.AddAuthorization(opts => {
-                opts.AddPolicy("Authorized", policy => {
+            services.AddAuthorization(opts =>
+            {
+                opts.AddPolicy("Authorized", policy =>
+                {
                     policy.RequireRole("User");
                 });
-                opts.AddPolicy("Admin", policy => {
+                opts.AddPolicy("Admin", policy =>
+                {
                     policy.RequireUserName(Configuration.GetSection("AdminUserName").Value);
                 });
 
@@ -87,6 +91,9 @@ namespace ArtStudio
             app.UseAuthorization();
             app.UseEndpoints(endpoints =>
             {
+                endpoints.MapControllerRoute(
+                      name: "default",
+                      pattern: "{controller=Home}/{action=Index}/{id?}");
                 endpoints.MapControllers();
                 endpoints.MapBlazorHub();
                 endpoints.MapFallbackToPage("/_Host");

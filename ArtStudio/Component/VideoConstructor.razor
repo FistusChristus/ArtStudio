@@ -1,0 +1,41 @@
+﻿
+<div class="@ContainerClass" style="width:@Width; height:@Height">
+    <video muted="@Muted" src="@Src" type="@Type" autoplay="@Autoplay" loop="@Loop" controls="@Controls" class="@Class" id="@Id"></video>
+</div>
+
+
+@code {
+    [Parameter]
+    public string Src { get; set; }
+    [Parameter]
+    public string ContainerClass { get; set; }
+    [Parameter]
+    public string Type { get; set; }
+    [Parameter]
+    public string Controls { get; set; }
+    [Parameter]
+    public string Muted { get; set; }
+    [Parameter]
+    public string Loop { get; set; }
+    [Parameter]
+    public string Autoplay { get; set; }
+    [Parameter]
+    public string Class { get; set; }
+    [Parameter]
+    public string Width { get; set; }
+    [Parameter]
+    public string Height { get; set; }
+    [Parameter]
+    public string Id { get; set; }
+
+    public VideoConstructor()
+    {
+        Src = "/video/SimpleClip.mp4";
+        Type = "video/mp4; codecs=&quot;avc1.42E01E, mp4a.40.2&quot;";
+        Muted = "muted";
+        Autoplay = "autoplay";
+        Loop = "loop";
+        Controls = "controls";
+        ContainerClass = "backGround_blockInner";
+    }
+}

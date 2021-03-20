@@ -77,6 +77,13 @@ using ArtStudio.Shared;
 #line hidden
 #nullable disable
 #nullable restore
+#line 11 "C:\Users\pervi\Desktop\New folder\SWPO\ArtStudio\_Imports.razor"
+using Microsoft.AspNetCore.Mvc.TagHelpers;
+
+#line default
+#line hidden
+#nullable disable
+#nullable restore
 #line 3 "C:\Users\pervi\Desktop\New folder\SWPO\ArtStudio\Pages\Identity\Login.razor"
 using ArtStudio.Models;
 

@@ -19,12 +19,13 @@ namespace ArtStudio
         //with CRUD
         public DbSet<Photo> Photos { get; set; }
         public DbSet<Video> Videos { get; set; }
-        public DbSet<Section> Sections { get; set; }
         public DbSet<Category> Categories { get; set; }
         public DbSet<Package> Packages { get; set; }
 
 
         //without CRUD
-        public DbSet<PackageBuyInfo> PackageBuyInfos { get; set; }
+        public DbSet<PackageInfo> PackageInfos { get; set; }
+        public DbSet<Section> Sections { get; set; }
+
     }
 }

@@ -126,7 +126,12 @@ namespace ArtStudio.Migrations
                     b.Property<bool>("Enabled")
                         .HasColumnType("bit");
 
+                    b.Property<Guid>("SectionId")
+                        .HasColumnType("uniqueidentifier");
+
                     b.HasKey("Id");
+
+                    b.HasIndex("SectionId");
 
                     b.ToTable("Categories");
                 });
@@ -157,7 +162,7 @@ namespace ArtStudio.Migrations
                     b.ToTable("Packages");
                 });
 
-            modelBuilder.Entity("ArtStudio.Models.PackageBuyInfo", b =>
+            modelBuilder.Entity("ArtStudio.Models.PackageInfo", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -181,6 +186,9 @@ namespace ArtStudio.Migrations
                     b.Property<DateTime>("EndDate")
                         .HasColumnType("datetime2");
 
+                    b.Property<Guid>("PackageId")
+                        .HasColumnType("uniqueidentifier");
+
                     b.Property<DateTime>("StartDate")
                         .HasColumnType("datetime2");
 
@@ -188,13 +196,18 @@ namespace ArtStudio.Migrations
 
                     b.HasIndex("ApplicationUserId1");
 
-                    b.ToTable("PackageBuyInfos");
+                    b.HasIndex("PackageId");
+
+                    b.ToTable("PackageInfos");
                 });
 
             modelBuilder.Entity("ArtStudio.Models.Photo", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("CategoryId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Description")
@@ -212,6 +225,9 @@ namespace ArtStudio.Migrations
                     b.Property<string>("Resolution")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("Size")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("Tags")
                         .HasColumnType("nvarchar(max)");
 
@@ -219,6 +235,8 @@ namespace ArtStudio.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("CategoryId");
 
                     b.ToTable("Photos");
                 });
@@ -249,6 +267,9 @@ namespace ArtStudio.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<Guid>("CategoryId")
+                        .HasColumnType("uniqueidentifier");
+
                     b.Property<string>("Description")
                         .HasColumnType("nvarchar(max)");
 
@@ -264,6 +285,9 @@ namespace ArtStudio.Migrations
                     b.Property<string>("Resolution")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("Size")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("Tags")
                         .HasColumnType("nvarchar(max)");
 
@@ -271,6 +295,8 @@ namespace ArtStudio.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("CategoryId");
 
                     b.ToTable("Videos");
                 });
@@ -379,13 +405,54 @@ namespace ArtStudio.Migrations
                     b.ToTable("AspNetUserTokens");
                 });
 
-            modelBuilder.Entity("ArtStudio.Models.PackageBuyInfo", b =>
+            modelBuilder.Entity("ArtStudio.Models.Category", b =>
+                {
+                    b.HasOne("ArtStudio.Models.Section", "Section")
+                        .WithMany()
+                        .HasForeignKey("SectionId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Section");
+                });
+
+            modelBuilder.Entity("ArtStudio.Models.PackageInfo", b =>
                 {
                     b.HasOne("ArtStudio.Models.ApplicationUser", "ApplicationUser")
                         .WithMany()
                         .HasForeignKey("ApplicationUserId1");
 
+                    b.HasOne("ArtStudio.Models.Package", "Package")
+                        .WithMany()
+                        .HasForeignKey("PackageId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.Navigation("ApplicationUser");
+
+                    b.Navigation("Package");
+                });
+
+            modelBuilder.Entity("ArtStudio.Models.Photo", b =>
+                {
+                    b.HasOne("ArtStudio.Models.Category", "Category")
+                        .WithMany()
+                        .HasForeignKey("CategoryId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Category");
+                });
+
+            modelBuilder.Entity("ArtStudio.Models.Video", b =>
+                {
+                    b.HasOne("ArtStudio.Models.Category", "Category")
+                        .WithMany()
+                        .HasForeignKey("CategoryId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Category");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>

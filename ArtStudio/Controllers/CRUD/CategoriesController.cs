@@ -2,19 +2,15 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using ArtStudio;
 using ArtStudio.Models;
-using Microsoft.AspNetCore.Authorization;
 
 namespace ArtStudio.Controllers.CRUD
 {
-    [Route("api/[controller]")]
-    [Authorize(Policy = "Admin")]
-    [ApiController]
-    public class CategoriesController : ControllerBase
+    public class CategoriesController : Controller
     {
         private readonly ApplicationDBContext _context;
 
@@ -23,81 +19,138 @@ namespace ArtStudio.Controllers.CRUD
             _context = context;
         }
 
-        // GET: api/Categories
-        [HttpGet]
-        public async Task<ActionResult<IEnumerable<Category>>> GetCategories()
+        // GET: Categories
+        public async Task<IActionResult> Index()
         {
-            return await _context.Categories.ToListAsync();
+            var applicationDBContext = _context.Categories.Include(c => c.Section);
+            return View(await applicationDBContext.ToListAsync());
         }
 
-        // GET: api/Categories/5
-        [HttpGet("{id}")]
-        public async Task<ActionResult<Category>> GetCategory(Guid id)
+        // GET: Categories/Details/5
+        public async Task<IActionResult> Details(Guid? id)
         {
-            var category = await _context.Categories.FindAsync(id);
+            if (id == null)
+            {
+                return NotFound();
+            }
 
+            var category = await _context.Categories
+                .Include(c => c.Section)
+                .FirstOrDefaultAsync(m => m.Id == id);
             if (category == null)
             {
                 return NotFound();
             }
 
-            return category;
+            return View(category);
         }
 
-        // PUT: api/Categories/5
-        [HttpPut("{id}")]
-        public async Task<IActionResult> PutCategory(Guid id, Category category)
+        // GET: Categories/Create
+        public IActionResult Create()
+        {
+            ViewData["SectionId"] = new SelectList(_context.Sections, "Id", "DisplayAlias");
+            return View();
+        }
+
+        // POST: Categories/Create
+        // To protect from overposting attacks, enable the specific properties you want to bind to, for 
+        // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Create([Bind("SectionId,Description,Id,DisplayAlias,Enabled")] Category category)
+        {
+            if (ModelState.IsValid)
+            {
+                category.Id = Guid.NewGuid();
+                _context.Add(category);
+                await _context.SaveChangesAsync();
+                return RedirectToAction(nameof(Index));
+            }
+            ViewData["SectionId"] = new SelectList(_context.Sections, "Id", "DisplayAlias", category.SectionId);
+            return View(category);
+        }
+
+        // GET: Categories/Edit/5
+        public async Task<IActionResult> Edit(Guid? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var category = await _context.Categories.FindAsync(id);
+            if (category == null)
+            {
+                return NotFound();
+            }
+            ViewData["SectionId"] = new SelectList(_context.Sections, "Id", "DisplayAlias", category.SectionId);
+            return View(category);
+        }
+
+        // POST: Categories/Edit/5
+        // To protect from overposting attacks, enable the specific properties you want to bind to, for 
+        // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Edit(Guid id, [Bind("SectionId,Description,Id,DisplayAlias,Enabled")] Category category)
         {
             if (id != category.Id)
             {
-                return BadRequest();
+                return NotFound();
             }
 
-            _context.Entry(category).State = EntityState.Modified;
-
-            try
+            if (ModelState.IsValid)
             {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!CategoryExists(id))
+                try
                 {
-                    return NotFound();
+                    _context.Update(category);
+                    await _context.SaveChangesAsync();
                 }
-                else
+                catch (DbUpdateConcurrencyException)
                 {
-                    throw;
+                    if (!CategoryExists(category.Id))
+                    {
+                        return NotFound();
+                    }
+                    else
+                    {
+                        throw;
+                    }
                 }
+                return RedirectToAction(nameof(Index));
             }
-
-            return NoContent();
+            ViewData["SectionId"] = new SelectList(_context.Sections, "Id", "DisplayAlias", category.SectionId);
+            return View(category);
         }
 
-        // POST: api/Categories
-        [HttpPost]
-        public async Task<ActionResult<Category>> PostCategory(Category category)
+        // GET: Categories/Delete/5
+        public async Task<IActionResult> Delete(Guid? id)
         {
-            _context.Categories.Add(category);
-            await _context.SaveChangesAsync();
+            if (id == null)
+            {
+                return NotFound();
+            }
 
-            return CreatedAtAction("GetCategory", new { id = category.Id }, category);
-        }
-
-        // DELETE: api/Categories/5
-        [HttpDelete("{id}")]
-        public async Task<ActionResult<Category>> DeleteCategory(Guid id)
-        {
-            var category = await _context.Categories.FindAsync(id);
+            var category = await _context.Categories
+                .Include(c => c.Section)
+                .FirstOrDefaultAsync(m => m.Id == id);
             if (category == null)
             {
                 return NotFound();
             }
 
+            return View(category);
+        }
+
+        // POST: Categories/Delete/5
+        [HttpPost, ActionName("Delete")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> DeleteConfirmed(Guid id)
+        {
+            var category = await _context.Categories.FindAsync(id);
             _context.Categories.Remove(category);
             await _context.SaveChangesAsync();
-
-            return category;
+            return RedirectToAction(nameof(Index));
         }
 
         private bool CategoryExists(Guid id)

@@ -3,28 +3,32 @@
 @using ArtStudio.Component
 @using ArtStudio.Models
 @using MudBlazor
-<div class="p-3 w-100">
+
+<div class="p-3 w-100 d-flex d-wrap">
     <MudGrid Spacing="1">
-        <MudItem xs=8 Class="">
+        <MudItem xs=8 Class="" Style="min-width:900px">
             <div class="d-flex">
                 @if (Name == "video")
                 {
-                    <ArtVideo ContainerClass="content_video d-flex" Height="550px"></ArtVideo>
+                    <VideoConstructor ContainerClass="content_video d-flex" Height="550px"></VideoConstructor>
                 }
                 @if (Name == "image")
                 {
-                    <ArtImage ContainerClass="content_video d-flex" Height="550px"></ArtImage>
+                    <ImageConstructor ContainerClass="content_video d-flex" Height="550px"></ImageConstructor>
                 }
 
             </div>
         </MudItem>
-        <MudItem xs=4 Class="">
+        <MudItem xs=4 Class="" Style="max-width:500px!important">
             <div class="content_header">
                 <div class="content_name font-weight-bold">@ContentResource.DisplayAlias</div>
-
             </div>
-            <MudButton Variant="Variant.Filled" Size="Size.Large" Class="m-1" Link="login" Color="Color.Primary">Добавить в корзину</MudButton>
-
+            <div class="d-flex justify-content-center">
+                <div class="d-flex justify-content-center align-items-center big-btn-PD">
+                    <a href="@ButtonLink" class="shine-button">Добавить в корзину</a>
+                </div>
+            </div>
+            <div class="divider mt-2 mb-2 ml-3 mr-3 "></div>
             <div class="properties_block">
                 <div class="property">
                     <div class="property_name font-weight-bold">Описание</div>
@@ -32,10 +36,15 @@
                 </div>
                 <div class="property">
                     <div class="property_name font-weight-bold">Аттрибуты</div>
-                    <div class="property_sub">Расширение</div>
-                    <div class="property_value secondary-text">@ContentResource.Resolution</div>
-                    <div class="property_sub">Размер</div>
-                    <div class="property_value secondary-text">@ContentResource.Size</div>
+                    <div class="d-flex justify-space-between">
+                        <div class="property_sub">Расширение</div>
+                        <div class="property_value secondary-text">@ContentResource.Resolution</div>
+                    </div>
+                    <div class="d-flex justify-space-between">
+                        <div class="property_sub">Размер</div>
+                        <div class="property_value secondary-text">@ContentResource.Size</div>
+                    </div>
+
                 </div>
                 <div class="property">
                     <div class="property_name font-weight-bold">Теги</div>
@@ -60,6 +69,7 @@
     [Parameter]
     public string Id { get; set; }
 
+    public string ButtonLink = "#";
     public Resource ContentResource { get; set; }
     protected override void OnInitialized()
     {

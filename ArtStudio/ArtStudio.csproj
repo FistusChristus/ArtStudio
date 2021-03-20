@@ -21,11 +21,4 @@
     <PackageReference Include="MudBlazor" Version="2.0.5" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Pages\Categories\" />
-    <Folder Include="Pages\Videos\" />
-    <Folder Include="Pages\Resources\" />
-    <Folder Include="Pages\Photos\" />
-  </ItemGroup>
-
 </Project>

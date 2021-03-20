@@ -25,8 +25,8 @@ namespace ArtStudio.Models
         public string Size { get; set; }
         public string Tags { get; set; }
         public double Price { get; set; }
-        Category Category { get; set; }
-        Guid CategoryId { get; set; }
+        public Category Category { get; set; }
+        public Guid CategoryId { get; set; }
     }
 
     public class Photo : Resource
@@ -42,17 +42,19 @@ namespace ArtStudio.Models
 
     public class Category : EntityData
     {
-        Section Section { get; set; }
-        Guid SectionId { get; set; }
+        public  Section Section { get; set; }
+        public Guid SectionId { get; set; }
     }
     public class Package: EntityData
     {
         public int CountOfDownlaods { get; set; }
         public double Price { get; set; }
     }   
-    public class PackageBuyInfo: EntityData
+    public class PackageInfo: EntityData
     {
         public DateTime StartDate { get; set; }
+        public Package Package { get; set; }
+        public Guid PackageId { get; set; }
         public DateTime EndDate { get; set; }
         public ApplicationUser ApplicationUser { get; set; }
         public Guid ApplicationUserId { get; set; }
