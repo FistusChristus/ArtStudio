@@ -4,14 +4,16 @@ using ArtStudio;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace ArtStudio.Migrations
 {
     [DbContext(typeof(ApplicationDBContext))]
-    partial class ApplicationDBContextModelSnapshot : ModelSnapshot
+    [Migration("20210322175728_Update2")]
+    partial class Update2
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -204,7 +206,7 @@ namespace ArtStudio.Migrations
                     b.ToTable("PackageInfos");
                 });
 
-            modelBuilder.Entity("ArtStudio.Models.Resource", b =>
+            modelBuilder.Entity("ArtStudio.Models.Photo", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -214,10 +216,6 @@ namespace ArtStudio.Migrations
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Description")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Discriminator")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("DisplayAlias")
@@ -245,9 +243,7 @@ namespace ArtStudio.Migrations
 
                     b.HasIndex("CategoryId");
 
-                    b.ToTable("Resource");
-
-                    b.HasDiscriminator<string>("Discriminator").HasValue("Resource");
+                    b.ToTable("Photos");
                 });
 
             modelBuilder.Entity("ArtStudio.Models.Section", b =>
@@ -270,17 +266,14 @@ namespace ArtStudio.Migrations
                     b.ToTable("Sections");
                 });
 
-            modelBuilder.Entity("ArtStudio.Models.UserCartContent", b =>
+            modelBuilder.Entity("ArtStudio.Models.Video", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid>("ApplicationUserId")
+                    b.Property<Guid>("CategoryId")
                         .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("ApplicationUserId1")
-                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("Description")
                         .HasColumnType("nvarchar(max)");
@@ -291,16 +284,26 @@ namespace ArtStudio.Migrations
                     b.Property<bool>("Enabled")
                         .HasColumnType("bit");
 
-                    b.Property<Guid>("ResourceId")
-                        .HasColumnType("uniqueidentifier");
+                    b.Property<double>("Price")
+                        .HasColumnType("float");
+
+                    b.Property<string>("Resolution")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Size")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Tags")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("URL")
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("ApplicationUserId1");
+                    b.HasIndex("CategoryId");
 
-                    b.HasIndex("ResourceId");
-
-                    b.ToTable("UserCartContents");
+                    b.ToTable("Videos");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -407,20 +410,6 @@ namespace ArtStudio.Migrations
                     b.ToTable("AspNetUserTokens");
                 });
 
-            modelBuilder.Entity("ArtStudio.Models.Photo", b =>
-                {
-                    b.HasBaseType("ArtStudio.Models.Resource");
-
-                    b.HasDiscriminator().HasValue("Photo");
-                });
-
-            modelBuilder.Entity("ArtStudio.Models.Video", b =>
-                {
-                    b.HasBaseType("ArtStudio.Models.Resource");
-
-                    b.HasDiscriminator().HasValue("Video");
-                });
-
             modelBuilder.Entity("ArtStudio.Models.Category", b =>
                 {
                     b.HasOne("ArtStudio.Models.Section", "Section")
@@ -449,7 +438,7 @@ namespace ArtStudio.Migrations
                     b.Navigation("Package");
                 });
 
-            modelBuilder.Entity("ArtStudio.Models.Resource", b =>
+            modelBuilder.Entity("ArtStudio.Models.Photo", b =>
                 {
                     b.HasOne("ArtStudio.Models.Category", "Category")
                         .WithMany()
@@ -460,21 +449,15 @@ namespace ArtStudio.Migrations
                     b.Navigation("Category");
                 });
 
-            modelBuilder.Entity("ArtStudio.Models.UserCartContent", b =>
+            modelBuilder.Entity("ArtStudio.Models.Video", b =>
                 {
-                    b.HasOne("ArtStudio.Models.ApplicationUser", "ApplicationUser")
+                    b.HasOne("ArtStudio.Models.Category", "Category")
                         .WithMany()
-                        .HasForeignKey("ApplicationUserId1");
-
-                    b.HasOne("ArtStudio.Models.Resource", "Resource")
-                        .WithMany()
-                        .HasForeignKey("ResourceId")
+                        .HasForeignKey("CategoryId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("ApplicationUser");
-
-                    b.Navigation("Resource");
+                    b.Navigation("Category");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>

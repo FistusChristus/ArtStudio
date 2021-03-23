@@ -54,7 +54,7 @@ namespace ArtStudio.Controllers.CRUD
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("CountOfDownlaods,Price,Description,Id,DisplayAlias,Enabled")] Package package)
+        public async Task<IActionResult> Create([Bind("CountOfDownlaods,Price,Description,Id,DisplayAlias,Enabled,Order")] Package package)
         {
             if (ModelState.IsValid)
             {
@@ -87,7 +87,7 @@ namespace ArtStudio.Controllers.CRUD
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(Guid id, [Bind("CountOfDownlaods,Price,Description,Id,DisplayAlias,Enabled")] Package package)
+        public async Task<IActionResult> Edit(Guid id, [Bind("CountOfDownlaods,Price,Description,Id,DisplayAlias,Enabled,Order")] Package package)
         {
             if (id != package.Id)
             {

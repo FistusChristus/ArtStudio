@@ -9,5 +9,7 @@ namespace ArtStudio.Models
     public class Session
     {
         public ClaimsPrincipal User { get; set; }
+        public string Name { get; set; }
+        public Guid Id{ get; set; }
     }
 }

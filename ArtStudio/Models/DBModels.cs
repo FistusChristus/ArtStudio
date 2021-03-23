@@ -49,6 +49,7 @@ namespace ArtStudio.Models
     {
         public int CountOfDownlaods { get; set; }
         public double Price { get; set; }
+        public int Order { get; set; }
     }   
     public class PackageInfo: EntityData
     {
@@ -56,6 +57,13 @@ namespace ArtStudio.Models
         public Package Package { get; set; }
         public Guid PackageId { get; set; }
         public DateTime EndDate { get; set; }
+        public ApplicationUser ApplicationUser { get; set; }
+        public Guid ApplicationUserId { get; set; }
+    }
+    public class UserCartContent : EntityData
+    {
+        public Guid ResourceId { get; set; }
+        public Resource Resource { get; set; }
         public ApplicationUser ApplicationUser { get; set; }
         public Guid ApplicationUserId { get; set; }
     }

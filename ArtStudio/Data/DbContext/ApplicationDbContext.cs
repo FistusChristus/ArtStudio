@@ -26,6 +26,7 @@ namespace ArtStudio
         //without CRUD
         public DbSet<PackageInfo> PackageInfos { get; set; }
         public DbSet<Section> Sections { get; set; }
+        public DbSet<UserCartContent> UserCartContents { get; set; }
 
     }
 }

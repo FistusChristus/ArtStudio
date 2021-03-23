@@ -1,9 +1,17 @@
 ﻿@inherits LayoutComponentBase
 @using ArtStudio.Services
+@using System.Security.Claims
 @inject JSRuntimeService JSRuntimeService
 @inject NavigationManager NavigationManager
 @using MudBlazor
 @using ArtStudio.Models
+@using System.Linq
+@using Microsoft.EntityFrameworkCore;
+@inject ApplicationDBContext dBContext
+@inject SessionService SessionService
+
+
+
 
 <MudLayout Class="leyaout">
     <MudAppBar Elevation="1" Dense="true" Fixed="true">
@@ -11,10 +19,11 @@
         <div class="@HeaderToggleClass"><span class="header_brand">@HeaderBrand</span></div>
         <MudAppBarSpacer />
         @*<MudIconButton Icon="@Icons.Custom.Brands.GitHub" Color="Color.Inherit" Link="https://github.com/Garderoben/MudBlazor" Target="_blank" />*@
-        <div class="ml-auto d-flex" style="align-items:center">
+        <div class="ml-auto d-flex" style="align-items:center; height:56px;" >
 
 
             <AuthorizeView>
+
                 <NotAuthorized>
                     <div class="d-flex justify-content-center align-items-center">
                         <a href="/login" class="shine-button primary-button button-small mr-2">Вход</a>
@@ -26,9 +35,9 @@
                     <MudAppBarSpacer />
                 </NotAuthorized>
                 <Authorized>
-                    <MudBadge Content="5" Color="Color.Primary" Overlap="true" Bottom="true" Class="mx-6 my-4">
+                    <MudBadge Content="@CountOfCartContent" Color="CountOfCartContent == 0 ? Color.Default:Color.Primary" Overlap="true" Bottom="true" Class="mx-6 my-4">
                         <NavLink href="cart">
-                            <MudIcon Icon="@Icons.Material.Filled.ShoppingCart" Color="Color.Primary" />
+                            <MudIcon Icon="@Icons.Material.Filled.ShoppingCart" Color="CountOfCartContent == 0 ? Color.Secondary:Color.Primary" />
                         </NavLink>
                     </MudBadge>
                     <div class="d-flex justify-content-center align-items-center">
@@ -47,6 +56,7 @@
 
             <AuthorizeView>
                 <Authorized>
+
                     <div class="text-center">@context.User.Identity.Name</div>
                     <div class="ca-d-flex ca-d-center m-2">
                         <MudAvatar Color="Color.Primary" Class="ca-avatar-80">@context.User.Identity.Name[0]</MudAvatar>
@@ -57,12 +67,12 @@
 
 
             <div class="d-flex justify-content-center align-items-center big-btn-PD">
-                    <a href="/pricing"class="shine-button">Купить</a>
+                <a href="/pricing" class="shine-button">Купить</a>
             </div>
             <AuthorizeView Policy="Admin">
                 <Authorized>
                     <div class="d-flex justify-content-center align-items-center mt-2">
-                            <a href="/admin"class="shine-button primary-button big-btn-PD">Админ панель</a>
+                        <a href="/admin" class="shine-button primary-button big-btn-PD">Админ панель</a>
                     </div>
                 </Authorized>
             </AuthorizeView>
@@ -80,7 +90,7 @@
         </MudNavMenu>
     </MudDrawer>
     <MudMainContent Class="">
-        <div style="margin-top:48px;" class="d-flex">
+        <div style="margin-top:56px;" class="d-flex">
             @Body
         </div>
     </MudMainContent>
@@ -91,6 +101,23 @@
 <MudSnackbarProvider></MudSnackbarProvider>
 
 @code{
+    public int CountOfCartContent = 0;
+
+    public Session Session { get; set; }
+
+    protected override void OnInitialized()
+    {
+        Session = SessionService.GetSession();
+        if (Session != null)
+            CountOfCartContent = dBContext.UserCartContents.Where(c => c.ApplicationUserId == Session.Id).Count();
+    }
+
+    //CountOfCartContent = dBContext.UserCartContents
+    //        .Include(c => c.Package)
+    //        .Where(c => c.ApplicationUserId == Session.Id)
+    //        .Sum(c => c.Package.CountOfDownlaods);
+
+
     public string HeaderBrand = "Sony World Photograpy Organization";
     public string HeaderToggleClass = "";
     MudTheme SWPO = new MudTheme()

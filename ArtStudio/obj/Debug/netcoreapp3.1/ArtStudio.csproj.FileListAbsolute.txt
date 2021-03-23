@@ -168,7 +168,6 @@ C:\Users\pervi\Desktop\New folder\SWPO\ArtStudio\obj\Debug\netcoreapp3.1\RazorDe
 C:\Users\pervi\Desktop\New folder\SWPO\ArtStudio\obj\Debug\netcoreapp3.1\RazorDeclaration\Component\ImageConstructor.razor.g.cs
 C:\Users\pervi\Desktop\New folder\SWPO\ArtStudio\obj\Debug\netcoreapp3.1\RazorDeclaration\Component\VideoConstructor.razor.g.cs
 C:\Users\pervi\Desktop\New folder\SWPO\ArtStudio\obj\Debug\netcoreapp3.1\RazorDeclaration\Pages\Content.razor.g.cs
-C:\Users\pervi\Desktop\New folder\SWPO\ArtStudio\obj\Debug\netcoreapp3.1\RazorDeclaration\Pages\EntityDetails.razor.g.cs
 C:\Users\pervi\Desktop\New folder\SWPO\ArtStudio\obj\Debug\netcoreapp3.1\RazorDeclaration\Pages\Identity\Login.razor.g.cs
 C:\Users\pervi\Desktop\New folder\SWPO\ArtStudio\obj\Debug\netcoreapp3.1\RazorDeclaration\Pages\Identity\Register.razor.g.cs
 C:\Users\pervi\Desktop\New folder\SWPO\ArtStudio\obj\Debug\netcoreapp3.1\RazorDeclaration\Pages\Index.razor.g.cs
@@ -182,7 +181,6 @@ C:\Users\pervi\Desktop\New folder\SWPO\ArtStudio\obj\Debug\netcoreapp3.1\Razor\A
 C:\Users\pervi\Desktop\New folder\SWPO\ArtStudio\obj\Debug\netcoreapp3.1\Razor\Component\ImageConstructor.razor.g.cs
 C:\Users\pervi\Desktop\New folder\SWPO\ArtStudio\obj\Debug\netcoreapp3.1\Razor\Component\VideoConstructor.razor.g.cs
 C:\Users\pervi\Desktop\New folder\SWPO\ArtStudio\obj\Debug\netcoreapp3.1\Razor\Pages\Content.razor.g.cs
-C:\Users\pervi\Desktop\New folder\SWPO\ArtStudio\obj\Debug\netcoreapp3.1\Razor\Pages\EntityDetails.razor.g.cs
 C:\Users\pervi\Desktop\New folder\SWPO\ArtStudio\obj\Debug\netcoreapp3.1\Razor\Pages\Identity\Login.razor.g.cs
 C:\Users\pervi\Desktop\New folder\SWPO\ArtStudio\obj\Debug\netcoreapp3.1\Razor\Pages\Identity\Register.razor.g.cs
 C:\Users\pervi\Desktop\New folder\SWPO\ArtStudio\obj\Debug\netcoreapp3.1\Razor\Pages\Index.razor.g.cs
@@ -228,3 +226,8 @@ C:\Users\pervi\Desktop\New folder\SWPO\ArtStudio\obj\Debug\netcoreapp3.1\Razor\V
 C:\Users\pervi\Desktop\New folder\SWPO\ArtStudio\obj\Debug\netcoreapp3.1\Razor\Views\Sections\Details.cshtml.g.cs
 C:\Users\pervi\Desktop\New folder\SWPO\ArtStudio\obj\Debug\netcoreapp3.1\Razor\Views\Sections\Edit.cshtml.g.cs
 C:\Users\pervi\Desktop\New folder\SWPO\ArtStudio\obj\Debug\netcoreapp3.1\Razor\Views\Sections\Index.cshtml.g.cs
+C:\Users\pervi\Desktop\New folder\SWPO\ArtStudio\obj\Debug\netcoreapp3.1\RazorDeclaration\Pages\Pricing.razor.g.cs
+C:\Users\pervi\Desktop\New folder\SWPO\ArtStudio\obj\Debug\netcoreapp3.1\Razor\Pages\Pricing.razor.g.cs
+C:\Users\pervi\Desktop\New folder\SWPO\ArtStudio\obj\Debug\netcoreapp3.1\Razor\Views\Admin\Index.cshtml.g.cs
+C:\Users\pervi\Desktop\New folder\SWPO\ArtStudio\obj\Debug\netcoreapp3.1\RazorDeclaration\Pages\Cart.razor.g.cs
+C:\Users\pervi\Desktop\New folder\SWPO\ArtStudio\obj\Debug\netcoreapp3.1\Razor\Pages\Cart.razor.g.cs

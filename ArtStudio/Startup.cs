@@ -36,7 +36,7 @@ namespace ArtStudio
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddTransient<JSRuntimeService>();
-            services.AddTransient<SessionService>();
+           
             services.AddTransient<AuthenticationStateProvider, AuthStateProvider>();
             services.AddTransient<IHttpContextAccessor, HttpContextAccessor>();
             services.AddRazorPages();
@@ -45,12 +45,14 @@ namespace ArtStudio
             services.AddControllersWithViews();
             services.AddControllers();
             services.AddDbContext<ApplicationDBContext>(options => options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
+
             services.AddIdentity<ApplicationUser, ApplicationRole>().AddEntityFrameworkStores<ApplicationDBContext>();
             services.AddAuthentication();
-
+                
 
             services.AddTransient<RequestService>();
-
+            services.AddTransient<SessionService>();
+            services.AddTransient<EntityService>();
 
             services.AddAuthorization(opts =>
             {
