@@ -9,6 +9,7 @@
 @inject HttpContextAccessor context
 @inject SessionService sessionService
 @inject EntityService entityService
+@inject NavigationManager navigationManager
 <VideoConstructor></VideoConstructor>
 <div class="index-container">
     <MudGrid Spacing="1">
@@ -71,6 +72,9 @@
 
     public void ToggleInCart(Resource resource)
     {
+        if (session == null)
+            navigationManager.NavigateTo("login");
+
         bool isInCart = dBContext.UserCartContents.Any(c => c.ApplicationUserId == session.Id && c.ResourceId == resource.Id);
 
 
