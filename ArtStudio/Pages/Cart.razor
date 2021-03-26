@@ -1,29 +1,58 @@
 ﻿@page "/cart"
 @using ArtStudio.Component
+@using ArtStudio.Models
+@using ArtStudio.Services
 @using MudBlazor
-<div class="mt-5">
+@using System.Linq
+@using Microsoft.EntityFrameworkCore;
+@inject ApplicationDBContext dBContext
+@inject NavigationManager navigationManager
+@inject SessionService sessionService
+@inject EntityService entityService
+<div class="mt-5 index-container">
     <MudGrid Spacing="1">
-        @for (int i = 0; i < 3; i++)
+        @foreach (var item in ResourcesInCartList)
         {
+            string href = "";
+
+
+            if (item.GetType() == typeof(Video))
+                href = "/Content/Video/" + item.Category.DisplayAlias + "/" + item.Id;
+            if (item.GetType() == typeof(Photo))
+                href = "/Content/Photo/" + item.Category.DisplayAlias + "/" + item.Id;
             <MudItem xs=6 sm=3 Class="card_block">
-                <NavLink href="content/video/22/22">
                     <MudCard Class="scale-in-center">
-                        <MudCardMedia Image="/img/SimplePhoto.jpg" Height="200" />
-                        <MudCardContent>
-                            <MudText Color="MudBlazor.Color.Dark" Typo="Typo.h5">Old Paint</MudText>
-                            <MudText Color="MudBlazor.Color.Dark" Typo="Typo.body2">Old paint found on a stone house door.</MudText>
-                            <MudText Color="MudBlazor.Color.Dark" Typo="Typo.body2">This photo was taken in a small village in Istra Croatia.</MudText>
-                        </MudCardContent>
+                        <NavLink href="@href">
+                            <MudCardMedia Image="@item.URL" Height="200" />
+                            <MudCardContent>
+                                <MudText Color="MudBlazor.Color.Dark" Typo="Typo.h5">@item.DisplayAlias</MudText>
+                                <MudText Color="MudBlazor.Color.Dark" Typo="Typo.body2">@item.Category.DisplayAlias</MudText>
+                                <MudText Color="MudBlazor.Color.Dark" Typo="Typo.body2">@item.Description</MudText>
+                            </MudCardContent>
+                        </NavLink>
                         <MudCardActions>
-                            <MudIconButton Icon="@Icons.Material.Filled.ShoppingCart" Color="Color.Default" />
+                            <MudIconButton Icon="@Icons.Material.Filled.ShoppingCart" @onclick="() =>  DeleteFromCart(item)" Color="Color.Primary" />
                         </MudCardActions>
                     </MudCard>
-                </NavLink>
             </MudItem>
         }
-
     </MudGrid>
 </div>
-@code {
 
+@code {
+    public List<Resource> ResourcesInCartList = new List<Resource>();
+    public Session session = null;
+    protected override void OnInitialized()
+    {
+        session = sessionService.GetSession();
+        if (session == null)
+            navigationManager.NavigateTo("/");
+
+        ResourcesInCartList = dBContext.UserCartContents.Include(c => c.Resource).Where(c => c.ApplicationUserId == session.Id).Select(c => c.Resource).ToList();
+    }
+    public void DeleteFromCart(Resource resource)
+    {
+        ResourcesInCartList.Remove(resource);
+        entityService.DeleteInCart(session.Id, resource.Id);
+    }
 }

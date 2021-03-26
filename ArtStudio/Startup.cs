@@ -1,22 +1,15 @@
 using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using MudBlazor.Services;
 using Microsoft.EntityFrameworkCore;
 using ArtStudio.Models;
-using Microsoft.AspNetCore.Identity;
 using ArtStudio.Services;
-using static ArtStudio.Data.Interfaces.Interfaces;
 using Microsoft.AspNetCore.Components.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.ResponseCompression;
 
 
@@ -38,10 +31,20 @@ namespace ArtStudio
             services.AddTransient<JSRuntimeService>();
            
             services.AddTransient<AuthenticationStateProvider, AuthStateProvider>();
-            services.AddTransient<IHttpContextAccessor, HttpContextAccessor>();
+     
             services.AddRazorPages();
             services.AddServerSideBlazor();
             services.AddMudServices();
+
+            services.AddDistributedMemoryCache();
+
+            services.AddSession(options =>
+            {
+                options.IdleTimeout = TimeSpan.FromSeconds(10);
+                options.Cookie.HttpOnly = true;
+                options.Cookie.IsEssential = true;
+            });
+
             services.AddControllersWithViews();
             services.AddControllers();
             services.AddDbContext<ApplicationDBContext>(options => options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
@@ -53,6 +56,7 @@ namespace ArtStudio
             services.AddTransient<RequestService>();
             services.AddTransient<SessionService>();
             services.AddTransient<EntityService>();
+            services.AddTransient<HttpContextAccessor>();
 
             services.AddAuthorization(opts =>
             {
@@ -91,6 +95,7 @@ namespace ArtStudio
             app.UseRouting();
             app.UseAuthentication();
             app.UseAuthorization();
+            app.UseSession();
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllerRoute(

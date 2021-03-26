@@ -31,10 +31,11 @@ namespace ArtStudio.Services
                 session.Name = GetUserName();
             }
         }
-        public void SetSession(ClaimsPrincipal user)
+        public void SetSession(ClaimsPrincipal user , HttpContext context)
         {
             session.User = user;
-            IsAuthenticated = user.Identity.IsAuthenticated;
+            IsAuthenticated = true;
+           
         }
 
         public Session GetSession()
@@ -54,8 +55,9 @@ namespace ArtStudio.Services
             return dbcontext.Users.FirstOrDefault(u => u.UserName == session.User.Identity.Name);
         }
 
-        public void RemoveSession()
+        public void RemoveSession(HttpContext context)
         {
+           
             session = new Session();
             IsAuthenticated = false;
         }

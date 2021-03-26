@@ -9,6 +9,8 @@
 @using Microsoft.EntityFrameworkCore;
 @inject ApplicationDBContext dBContext
 @inject SessionService SessionService
+@inject EntityService entityService
+
 
 
 
@@ -16,7 +18,7 @@
 <MudLayout Class="leyaout">
     <MudAppBar Elevation="1" Dense="true" Fixed="true">
         <MudIconButton Icon="@Icons.Material.Filled.ArrowBackIos" Color="Color.Inherit" Edge="Edge.Start" Class="@rotate" OnClick="@ToggleDrawer" />
-        <div class="@HeaderToggleClass"><span class="header_brand">@HeaderBrand</span></div>
+        <NavLink href="/"><div class="@HeaderToggleClass"><span class="header_brand">@HeaderBrand</span></div></NavLink>
         <MudAppBarSpacer />
         @*<MudIconButton Icon="@Icons.Custom.Brands.GitHub" Color="Color.Inherit" Link="https://github.com/Garderoben/MudBlazor" Target="_blank" />*@
         <div class="ml-auto d-flex" style="align-items:center; height:56px;" >
@@ -101,6 +103,8 @@
 <MudSnackbarProvider></MudSnackbarProvider>
 
 @code{
+
+
     public int CountOfCartContent = 0;
 
     public Session Session { get; set; }
@@ -110,12 +114,9 @@
         Session = SessionService.GetSession();
         if (Session != null)
             CountOfCartContent = dBContext.UserCartContents.Where(c => c.ApplicationUserId == Session.Id).Count();
-    }
 
-    //CountOfCartContent = dBContext.UserCartContents
-    //        .Include(c => c.Package)
-    //        .Where(c => c.ApplicationUserId == Session.Id)
-    //        .Sum(c => c.Package.CountOfDownlaods);
+
+    }
 
 
     public string HeaderBrand = "Sony World Photograpy Organization";

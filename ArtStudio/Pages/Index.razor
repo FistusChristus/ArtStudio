@@ -1,25 +1,42 @@
 ﻿@page "/"
+@using ArtStudio.Models
 @using ArtStudio.Component
 @using MudBlazor
+@using System.Linq
+@using ArtStudio.Services
+@using Microsoft.EntityFrameworkCore;
+@inject ApplicationDBContext dBContext
+@inject HttpContextAccessor context
+@inject SessionService sessionService
+@inject EntityService entityService
 <VideoConstructor></VideoConstructor>
 <div class="index-container">
     <MudGrid Spacing="1">
-        @for(int i=0;i<10;i++)
+        @foreach (var item in ResourcesList)
         {
+            string href = "";
+
+
+            if (item.GetType() == typeof(Video))
+                href = "/Content/Video/" + item.Category.DisplayAlias + "/" + item.Id;
+            if (item.GetType() == typeof(Photo))
+                href = "/Content/Photo/" + item.Category.DisplayAlias + "/" + item.Id;
             <MudItem xs=6 sm=3 Class="card_block">
-                <NavLink href="content/video/22/22">
-                    <MudCard Class="scale-in-center">
-                        <MudCardMedia Image="/img/SimplePhoto.jpg" Height="200" />
+
+                <MudCard Class="scale-in-center">
+                    <NavLink href="@href">
+                        <MudCardMedia Image="@item.URL" Height="200" />
                         <MudCardContent>
-                            <MudText Color="MudBlazor.Color.Dark" Typo="Typo.h5">Old Paint</MudText>
-                            <MudText Color="MudBlazor.Color.Dark" Typo="Typo.body2">Old paint found on a stone house door.</MudText>
-                            <MudText Color="MudBlazor.Color.Dark" Typo="Typo.body2">This photo was taken in a small village in Istra Croatia.</MudText>
+                            <MudText Color="MudBlazor.Color.Dark" Typo="Typo.h5">@item.DisplayAlias</MudText>
+                            <MudText Color="MudBlazor.Color.Dark" Typo="Typo.body2">@item.Category.DisplayAlias</MudText>
+                            <MudText Color="MudBlazor.Color.Dark" Typo="Typo.body2">@item.Description</MudText>
                         </MudCardContent>
-                        <MudCardActions>
-                            <MudIconButton Icon="@Icons.Material.Filled.ShoppingCart" Color="Color.Default" />
-                        </MudCardActions>
-                    </MudCard>
-                </NavLink>
+                    </NavLink>
+                    <MudCardActions>
+                        <MudIconButton Icon="@Icons.Material.Filled.ShoppingCart" @onclick="()=>ToggleInCart(item)" Color="SetColor(item)" />
+                    </MudCardActions>
+                </MudCard>
+
             </MudItem>
         }
 
@@ -28,4 +45,42 @@
 @code{
     [CascadingParameter]
     private Task<AuthenticationState> authenticationStateTask { get; set; }
+    public List<Resource> ResourcesList = new List<Resource>();
+    public Session session = null;
+
+    protected override void OnInitialized()
+    {
+        session = sessionService.GetSession();
+        var photosList = dBContext.Photos.Include(r => r.Category).Where(r => r.Enabled).ToList();
+        var videosList = dBContext.Videos.Include(r => r.Category).Where(r => r.Enabled).ToList();
+        ResourcesList.AddRange(photosList);
+        ResourcesList.AddRange(videosList);
+    }
+    public Color SetColor(Resource resource)
+    {
+        Color result = Color.Default;
+        if (session != null)
+        {
+            bool isInCart = dBContext.UserCartContents.Any(c => c.ApplicationUserId == session.Id && c.ResourceId == resource.Id);
+
+            result = isInCart ? Color.Primary : Color.Default;
+        }
+        return result;
+
+    }
+
+    public void ToggleInCart(Resource resource)
+    {
+        bool isInCart = dBContext.UserCartContents.Any(c => c.ApplicationUserId == session.Id && c.ResourceId == resource.Id);
+
+
+        if (isInCart)
+            entityService.DeleteInCart(session.Id, resource.Id);
+        else
+            entityService.AddToCart(session.Id, resource.Id);
+
+        int index = ResourcesList.IndexOf(resource);
+        ResourcesList.Remove(resource);
+        ResourcesList.Insert(index, resource);
+    }
 }

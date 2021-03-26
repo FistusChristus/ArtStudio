@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Http;
 using static ArtStudio.Data.Interfaces.Interfaces;
 
 
-    public class HttpContextAccessor : IHttpContextAccessor
+    public class HttpContextAccessor
     {
         private static AsyncLocal<HttpContextHolder> _httpContextCurrent = new AsyncLocal<HttpContextHolder>();
 

@@ -442,6 +442,7 @@ app {
 
 .header_brand {
     font-size: 18px;
+    cursor:pointer;
 }
 
 .slide-out-bck-left {
@@ -546,6 +547,7 @@ app {
     font-family: 'Montserrat', sans-serif;
     color: white;
     transition: .2s ease-in-out;
+    cursor:pointer;
 }
 
     .shine-button:before {

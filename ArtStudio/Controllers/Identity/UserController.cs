@@ -7,6 +7,7 @@ using static ArtStudio.Data.Interfaces.Interfaces;
 using System.Threading.Tasks;
 using ArtStudio.Services;
 
+
 namespace ArtStudio.Controllers.Identity
 {
     [ApiController]
@@ -37,7 +38,7 @@ namespace ArtStudio.Controllers.Identity
             if (result.Succeeded)
             {
                 await signInManager.SignInAsync(user, false);
-                sessionService.SetSession(User);
+                sessionService.SetSession(User, this.HttpContext);
             }
 
             return new Response(result.Succeeded, null, result.Errors.ToString());
@@ -50,7 +51,7 @@ namespace ArtStudio.Controllers.Identity
             var result = await signInManager.PasswordSignInAsync(model.Email, model.Password, model.RememberMe, false);
             if (result.Succeeded)
             {
-                sessionService.SetSession(User);
+                sessionService.SetSession(User, this.HttpContext);
             }
             string error = result.Succeeded ? "" : "Неверный логин или пароль";
             return new Response(result.Succeeded, null, error);
@@ -61,6 +62,7 @@ namespace ArtStudio.Controllers.Identity
         public async Task<Response> LogOut()
         {
             await signInManager.SignOutAsync();
+            sessionService.RemoveSession(this.HttpContext);
             return new Response(true, null, null);
         }
     }
