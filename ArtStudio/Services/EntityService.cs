@@ -16,11 +16,11 @@ namespace ArtStudio.Services
 
     public class EntityService
     {
-       
+
         public readonly ApplicationDBContext dBContext;
         public EntityService(ApplicationDBContext dBContext)
         {
-            this.dBContext = dBContext; 
+            this.dBContext = dBContext;
         }
 
         public bool AddToCart(Guid userId, Guid resourceId)
@@ -51,11 +51,10 @@ namespace ArtStudio.Services
                 throw new ArgumentNullException();
 
             Resource resource = null;
-            if (resourceType.ToLower() == "video")
-                resource = dBContext.Videos.Include(r => r.Category).FirstOrDefault(r => r.Id == Guid.Parse(resourceId) && r.Enabled);
             if (resourceType.ToLower() == "photo")
                 resource = dBContext.Photos.Include(r => r.Category).FirstOrDefault(r => r.Id == Guid.Parse(resourceId) && r.Enabled);
             return resource;
         }
+
     }
 }

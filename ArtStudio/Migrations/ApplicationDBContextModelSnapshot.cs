@@ -58,12 +58,27 @@ namespace ArtStudio.Migrations
                         .IsConcurrencyToken()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int>("CountOfDownload")
+                        .HasColumnType("int");
+
+                    b.Property<int>("CountOfSuccessDownload")
+                        .HasColumnType("int");
+
                     b.Property<string>("Email")
                         .HasMaxLength(256)
                         .HasColumnType("nvarchar(256)");
 
                     b.Property<bool>("EmailConfirmed")
                         .HasColumnType("bit");
+
+                    b.Property<string>("FirstName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("LastName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Location")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<bool>("LockoutEnabled")
                         .HasColumnType("bit");
@@ -177,6 +192,9 @@ namespace ArtStudio.Migrations
                     b.Property<string>("ApplicationUserId1")
                         .HasColumnType("nvarchar(450)");
 
+                    b.Property<int>("CountOfDownload")
+                        .HasColumnType("int");
+
                     b.Property<string>("Description")
                         .HasColumnType("nvarchar(max)");
 
@@ -226,9 +244,6 @@ namespace ArtStudio.Migrations
                     b.Property<bool>("Enabled")
                         .HasColumnType("bit");
 
-                    b.Property<double>("Price")
-                        .HasColumnType("float");
-
                     b.Property<string>("Resolution")
                         .HasColumnType("nvarchar(max)");
 
@@ -248,6 +263,37 @@ namespace ArtStudio.Migrations
                     b.ToTable("Resource");
 
                     b.HasDiscriminator<string>("Discriminator").HasValue("Resource");
+                });
+
+            modelBuilder.Entity("ArtStudio.Models.ResourceFile", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("ContentType")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Description")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("DisplayAlias")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("Enabled")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("ResourceFilePath")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<Guid>("ResourceId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ResourceId");
+
+                    b.ToTable("ResourceFiles");
                 });
 
             modelBuilder.Entity("ArtStudio.Models.Section", b =>
@@ -414,13 +460,6 @@ namespace ArtStudio.Migrations
                     b.HasDiscriminator().HasValue("Photo");
                 });
 
-            modelBuilder.Entity("ArtStudio.Models.Video", b =>
-                {
-                    b.HasBaseType("ArtStudio.Models.Resource");
-
-                    b.HasDiscriminator().HasValue("Video");
-                });
-
             modelBuilder.Entity("ArtStudio.Models.Category", b =>
                 {
                     b.HasOne("ArtStudio.Models.Section", "Section")
@@ -458,6 +497,17 @@ namespace ArtStudio.Migrations
                         .IsRequired();
 
                     b.Navigation("Category");
+                });
+
+            modelBuilder.Entity("ArtStudio.Models.ResourceFile", b =>
+                {
+                    b.HasOne("ArtStudio.Models.Resource", "Resource")
+                        .WithMany()
+                        .HasForeignKey("ResourceId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Resource");
                 });
 
             modelBuilder.Entity("ArtStudio.Models.UserCartContent", b =>

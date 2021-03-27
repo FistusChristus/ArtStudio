@@ -1,0 +1,112 @@
+﻿@page "/profile"
+
+@using ArtStudio.Models
+@using ArtStudio.Services
+@using MudBlazor
+@using Microsoft.EntityFrameworkCore
+
+@inject NavigationManager NavigationManager
+@inject SessionService SessionService
+@inject ApplicationDBContext dBContext
+@inject UserService UserService
+<link rel="icon" type="image/png" href="images/icons/favicon.ico" />
+<!--===============================================================================================-->
+<link rel="stylesheet" type="text/css" href="vendor/bootstrap/css/bootstrap.min.css">
+<!--===============================================================================================-->
+<link rel="stylesheet" type="text/css" href="fonts/font-awesome-4.7.0/css/font-awesome.min.css">
+<!--===============================================================================================-->
+<link rel="stylesheet" type="text/css" href="fonts/iconic/css/material-design-iconic-font.min.css">
+<!--===============================================================================================-->
+<link rel="stylesheet" type="text/css" href="vendor/animate/animate.css">
+<!--===============================================================================================-->
+<link rel="stylesheet" type="text/css" href="vendor/css-hamburgers/hamburgers.min.css">
+<!--===============================================================================================-->
+<link rel="stylesheet" type="text/css" href="vendor/animsition/css/animsition.min.css">
+<!--===============================================================================================-->
+<link rel="stylesheet" type="text/css" href="vendor/select2/select2.min.css">
+<!--===============================================================================================-->
+<link rel="stylesheet" type="text/css" href="vendor/daterangepicker/daterangepicker.css">
+<!--===============================================================================================-->
+<link rel="stylesheet" type="text/css" href="css/util.css">
+<link rel="stylesheet" type="text/css" href="css/main.css">
+<!--===============================================================================================-->
+<div class="identity_bg ">
+</div>
+<div class="d-flex ca-d-center mt-2 pos-relative" style="width:100%; ">
+    <div>
+        <div class="wrap-login100">
+            <div class="login100-form validate-form">
+                <h3 class="mb-3">Профиль</h3>
+                <div class="form-group">
+                    <span class="control-label">Email </span>
+                    <input class="form-control" disabled @bind-value="User.Email" />
+                </div>
+                <div class="form-group">
+                    <span class="control-label">Имя</span>
+                    <input class="form-control" placeholder="Введите ваше имя" @bind-value="User.FirstName" />
+                </div>
+                <div class="form-group">
+                    <span class="control-label">Фамилия </span>
+                    <input class="form-control" placeholder="Введите вашу фамилию" @bind-value="User.LastName" />
+                </div>
+                <div class="form-group">
+                    <span class="control-label">Местонахождение </span>
+                    <input class="form-control" placeholder="Введите ваш город" @bind-value="User.Location" />
+                </div>
+                <div class="form-group">
+                    <span class="control-label">Номер телефона </span>
+                    <input class="form-control" placeholder="Введите ваш номер телефона" @bind-value="User.PhoneNumber" />
+                </div>
+                <div class="form-group">
+                    <span class="control-label">Количество купленых пакетов: </span>
+                    <span class="control-label">@CountOfPackages</span>
+                </div>
+                <div class="form-group">
+                    <span class="control-label">Количество доступных скачиваний: </span>
+                    <span class="control-label">@User.CountOfDownload</span>
+                </div>
+                <div class="form-group">
+                    <span class="control-label">Количество cкачиваний: </span>
+                    <span class="control-label">@User.CountOfSuccessDownload</span>
+                </div>
+                <div class="container-login100-form-btn">
+                    <button @onclick="UpdateProfile" class="login100-form-btn">
+                        Сохранить
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<!--===============================================================================================-->
+
+
+@code{
+    [Inject] private IDialogService DialogService { get; set; }
+
+    public ApplicationUser User { get; set; }
+    public Session Session { get; set; }
+    public int CountOfDownloads { get; set; }
+    public int CountOfPackages { get; set; }
+
+
+    protected override  void OnInitialized()
+    {
+
+        Session = SessionService.GetSession();
+        if (Session == null)
+            NavigationManager.NavigateTo("/");
+        CountOfPackages = UserService.GetUserCountOfPackages();
+        User = dBContext.Users.FirstOrDefault(u => u.Id == Session.Id.ToString());
+    }
+    public async void UpdateProfile()
+    {
+        var result = await UserService.UpdateUserData(User);
+        if (result)
+            await DialogService.ShowMessageBox("","Данные успешно обновлены");
+    }
+
+}

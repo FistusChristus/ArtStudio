@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace ArtStudio.Controllers
 {
-    public class Admin : Controller
+    public class AdminController : Controller
     {
         public IActionResult Index()
         {

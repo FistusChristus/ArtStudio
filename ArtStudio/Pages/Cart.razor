@@ -9,34 +9,46 @@
 @inject NavigationManager navigationManager
 @inject SessionService sessionService
 @inject EntityService entityService
-<div class="mt-5 index-container">
+@inject UserService UserService
+<div class="cart-container">
+    <div class="d-flex align-items-center">
+        <h1 class="m-3">Корзина</h1>
+        @if (ResourcesInCartList.Count > 0)
+        {
+            <a @onclick="Download" class="shine-button primary-button button-small ">Скачать</a>
+        }
+    </div>
+
     <MudGrid Spacing="1">
         @foreach (var item in ResourcesInCartList)
         {
-            string href = "";
+            string href = "/Content/Photo/" + item.Category.DisplayAlias + "/" + item.Id; 
 
-
-            if (item.GetType() == typeof(Video))
-                href = "/Content/Video/" + item.Category.DisplayAlias + "/" + item.Id;
-            if (item.GetType() == typeof(Photo))
-                href = "/Content/Photo/" + item.Category.DisplayAlias + "/" + item.Id;
             <MudItem xs=6 sm=3 Class="card_block">
-                    <MudCard Class="scale-in-center">
-                        <NavLink href="@href">
-                            <MudCardMedia Image="@item.URL" Height="200" />
-                            <MudCardContent>
-                                <MudText Color="MudBlazor.Color.Dark" Typo="Typo.h5">@item.DisplayAlias</MudText>
-                                <MudText Color="MudBlazor.Color.Dark" Typo="Typo.body2">@item.Category.DisplayAlias</MudText>
-                                <MudText Color="MudBlazor.Color.Dark" Typo="Typo.body2">@item.Description</MudText>
-                            </MudCardContent>
-                        </NavLink>
-                        <MudCardActions>
-                            <MudIconButton Icon="@Icons.Material.Filled.ShoppingCart" @onclick="() =>  DeleteFromCart(item)" Color="Color.Primary" />
-                        </MudCardActions>
-                    </MudCard>
+                <MudCard Class="scale-in-center">
+                    <NavLink href="@href">
+                        <MudCardMedia Image="@item.URL" Height="200" />
+                        <MudCardContent>
+                            <MudText Color="MudBlazor.Color.Dark" Typo="Typo.h5">@item.DisplayAlias</MudText>
+                            <MudText Color="MudBlazor.Color.Dark" Typo="Typo.body2">@item.Category.DisplayAlias</MudText>
+                            <MudText Color="MudBlazor.Color.Dark" Typo="Typo.body2">@item.Description</MudText>
+                        </MudCardContent>
+                    </NavLink>
+                    <MudCardActions>
+                        <MudIconButton Icon="@Icons.Material.Filled.ShoppingCart" @onclick="() =>  DeleteFromCart(item)" Color="Color.Primary" />
+                    </MudCardActions>
+                </MudCard>
             </MudItem>
         }
     </MudGrid>
+    @if (ResourcesInCartList.Count == 0)
+    {
+        <div class="d-flex w-100 justify-content-center">
+            <h3>Ваша корзина пуста</h3>
+        </div>
+
+    }
+
 </div>
 
 @code {
@@ -48,11 +60,19 @@
         if (session == null)
             navigationManager.NavigateTo("/");
 
-        ResourcesInCartList = dBContext.UserCartContents.Include(c => c.Resource).Where(c => c.ApplicationUserId == session.Id).Select(c => c.Resource).ToList();
+        ResourcesInCartList = dBContext.UserCartContents.Include(c => c.Resource).Where(c => c.ApplicationUserId == session.Id && c.Enabled).Select(c => c.Resource).ToList();
     }
     public void DeleteFromCart(Resource resource)
     {
         ResourcesInCartList.Remove(resource);
         entityService.DeleteInCart(session.Id, resource.Id);
+    }
+    public void Download()
+    {
+        if (UserService.IsCanDownload())
+        {
+            ResourcesInCartList = new List<Resource>();
+            navigationManager.NavigateTo("/File/DownloadAllCart", true);
+        }
     }
 }

@@ -15,13 +15,8 @@
     <MudGrid Spacing="1">
         @foreach (var item in ResourcesList)
         {
-            string href = "";
+            string href = "/Content/Photo/" + item.Category.DisplayAlias + "/" + item.Id;
 
-
-            if (item.GetType() == typeof(Video))
-                href = "/Content/Video/" + item.Category.DisplayAlias + "/" + item.Id;
-            if (item.GetType() == typeof(Photo))
-                href = "/Content/Photo/" + item.Category.DisplayAlias + "/" + item.Id;
             <MudItem xs=6 sm=3 Class="card_block">
 
                 <MudCard Class="scale-in-center">
@@ -48,21 +43,20 @@
     private Task<AuthenticationState> authenticationStateTask { get; set; }
     public List<Resource> ResourcesList = new List<Resource>();
     public Session session = null;
+    [Inject] private IDialogService DialogService { get; set; }
 
     protected override void OnInitialized()
     {
         session = sessionService.GetSession();
         var photosList = dBContext.Photos.Include(r => r.Category).Where(r => r.Enabled).ToList();
-        var videosList = dBContext.Videos.Include(r => r.Category).Where(r => r.Enabled).ToList();
         ResourcesList.AddRange(photosList);
-        ResourcesList.AddRange(videosList);
     }
     public Color SetColor(Resource resource)
     {
         Color result = Color.Default;
         if (session != null)
         {
-            bool isInCart = dBContext.UserCartContents.Any(c => c.ApplicationUserId == session.Id && c.ResourceId == resource.Id);
+            bool isInCart = dBContext.UserCartContents.Any(c => c.ApplicationUserId == session.Id && c.ResourceId == resource.Id && c.Enabled);
 
             result = isInCart ? Color.Primary : Color.Default;
         }
@@ -70,21 +64,37 @@
 
     }
 
-    public void ToggleInCart(Resource resource)
+    public async void ToggleInCart(Resource resource)
     {
         if (session == null)
             navigationManager.NavigateTo("login");
-
-        bool isInCart = dBContext.UserCartContents.Any(c => c.ApplicationUserId == session.Id && c.ResourceId == resource.Id);
-
-
-        if (isInCart)
-            entityService.DeleteInCart(session.Id, resource.Id);
         else
-            entityService.AddToCart(session.Id, resource.Id);
+        {
+            bool isInCart = dBContext.UserCartContents.Any(c => c.ApplicationUserId == session.Id && c.ResourceId == resource.Id);
 
-        int index = ResourcesList.IndexOf(resource);
-        ResourcesList.Remove(resource);
-        ResourcesList.Insert(index, resource);
+
+            if (isInCart)
+            {
+                var result = entityService.DeleteInCart(session.Id, resource.Id);
+                var mb = await DialogService.ShowMessageBox("Товар удален с корзины", "", yesText: "Просмотреть корзину", cancelText: "Ок");
+                if (mb != null)
+                    navigationManager.NavigateTo("/cart");
+            }
+            else
+            {
+                var result = entityService.AddToCart(session.Id, resource.Id);
+                if (result)
+                {
+                    var mb = await DialogService.ShowMessageBox("Товар добавлен в корзину", "", yesText: "Просмотреть корзину", cancelText: "Ок");
+                    if (mb !=null)
+                        navigationManager.NavigateTo("/cart");
+                }
+            }
+
+            int index = ResourcesList.IndexOf(resource);
+            ResourcesList.Remove(resource);
+            ResourcesList.Insert(index, resource);
+        }
+
     }
 }

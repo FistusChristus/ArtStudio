@@ -1,0 +1,110 @@
+﻿@page "/category/{id}"
+@using ArtStudio.Models
+@using ArtStudio.Component
+@using MudBlazor
+@using System.Linq
+@using ArtStudio.Services
+@using Microsoft.EntityFrameworkCore;
+@inject ApplicationDBContext dBContext
+@inject HttpContextAccessor context
+@inject SessionService sessionService
+@inject EntityService entityService
+@inject NavigationManager navigationManager
+
+<div class="category-container">
+    <div class="d-flex align-items-center">
+        <h1 class="m-3">Просмотр категории : @CategoryName</h1>
+
+    </div>
+    <MudGrid Spacing="1">
+        @foreach (var item in ResourcesList)
+        {
+            string href = "/Content/Photo/" + item.Category.DisplayAlias + "/" + item.Id;
+
+            <MudItem xs=6 sm=3 Class="card_block">
+
+                <MudCard Class="scale-in-center">
+                    <NavLink href="@href">
+                        <MudCardMedia Image="@item.URL" Height="200" />
+                        <MudCardContent>
+                            <MudText Color="MudBlazor.Color.Dark" Typo="Typo.h5">@item.DisplayAlias</MudText>
+                            <MudText Color="MudBlazor.Color.Dark" Typo="Typo.body2">@item.Category.DisplayAlias</MudText>
+                            <MudText Color="MudBlazor.Color.Dark" Typo="Typo.body2">@item.Description</MudText>
+                        </MudCardContent>
+                    </NavLink>
+                    <MudCardActions>
+                        <MudIconButton Icon="@Icons.Material.Filled.ShoppingCart" @onclick="()=>ToggleInCart(item)" Color="SetColor(item)" />
+                    </MudCardActions>
+                </MudCard>
+
+            </MudItem>
+        }
+
+    </MudGrid>
+</div>
+@code{
+    [CascadingParameter]
+    private Task<AuthenticationState> authenticationStateTask { get; set; }
+    public List<Resource> ResourcesList = new List<Resource>();
+    public Session session = null;
+    public string CategoryName = null;
+
+    [Parameter]
+    public string Id { get; set; }
+
+    [Inject] private IDialogService DialogService { get; set; }
+
+    protected override void OnInitialized()
+    {
+        session = sessionService.GetSession();
+        var photosList = dBContext.Photos.Include(r => r.Category).Where(r => r.Enabled && r.CategoryId == Guid.Parse(Id)).ToList();
+        CategoryName = dBContext.Categories.FirstOrDefault(c => c.Id == Guid.Parse(Id)).DisplayAlias;
+        ResourcesList.AddRange(photosList);
+    }
+    public Color SetColor(Resource resource)
+    {
+        Color result = Color.Default;
+        if (session != null)
+        {
+            bool isInCart = dBContext.UserCartContents.Any(c => c.ApplicationUserId == session.Id && c.ResourceId == resource.Id && c.Enabled);
+
+            result = isInCart ? Color.Primary : Color.Default;
+        }
+        return result;
+
+    }
+
+    public async void ToggleInCart(Resource resource)
+    {
+        if (session == null)
+            navigationManager.NavigateTo("login");
+        else
+        {
+            bool isInCart = dBContext.UserCartContents.Any(c => c.ApplicationUserId == session.Id && c.ResourceId == resource.Id);
+
+
+            if (isInCart)
+            {
+                var result = entityService.DeleteInCart(session.Id, resource.Id);
+                var mb = await DialogService.ShowMessageBox("Товар удален с корзины", "", yesText: "Просмотреть корзину", cancelText: "Ок");
+                if (mb != null)
+                    navigationManager.NavigateTo("/cart");
+            }
+            else
+            {
+                var result = entityService.AddToCart(session.Id, resource.Id);
+                if (result)
+                {
+                    var mb = await DialogService.ShowMessageBox("Товар добавлен в корзину", "", yesText: "Просмотреть корзину", cancelText: "Ок");
+                    if (mb != null)
+                        navigationManager.NavigateTo("/cart");
+                }
+            }
+
+            int index = ResourcesList.IndexOf(resource);
+            ResourcesList.Remove(resource);
+            ResourcesList.Insert(index, resource);
+        }
+
+    }
+}

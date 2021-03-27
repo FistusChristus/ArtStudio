@@ -18,7 +18,6 @@ namespace ArtStudio
         }
         //with CRUD
         public DbSet<Photo> Photos { get; set; }
-        public DbSet<Video> Videos { get; set; }
         public DbSet<Category> Categories { get; set; }
         public DbSet<Package> Packages { get; set; }
 
@@ -27,6 +26,7 @@ namespace ArtStudio
         public DbSet<PackageInfo> PackageInfos { get; set; }
         public DbSet<Section> Sections { get; set; }
         public DbSet<UserCartContent> UserCartContents { get; set; }
+        public DbSet<ResourceFile> ResourceFiles { get; set; }
 
     }
 }

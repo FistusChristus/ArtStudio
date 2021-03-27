@@ -7,16 +7,21 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using ArtStudio;
 using ArtStudio.Models;
+using Microsoft.AspNetCore.Http;
+using System.IO;
+using Microsoft.AspNetCore.Hosting;
 
 namespace ArtStudio.Controllers
 {
     public class PhotosController : Controller
     {
         private readonly ApplicationDBContext _context;
+        private readonly IWebHostEnvironment _appEnvironment;
 
-        public PhotosController(ApplicationDBContext context)
+        public PhotosController(ApplicationDBContext context, IWebHostEnvironment appEnvironment)
         {
             _context = context;
+            _appEnvironment = appEnvironment;
         }
 
         // GET: Photos
@@ -57,12 +62,34 @@ namespace ArtStudio.Controllers
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("URL,Resolution,Size,Tags,Price,CategoryId,Description,Id,DisplayAlias,Enabled")] Photo photo)
+        public async Task<IActionResult> Create([Bind("Resolution,Size,Tags,CategoryId,Description,Id,DisplayAlias,Enabled")] Photo photo, IFormFile uploadedFile, IFormFile resourceFile)
         {
             if (ModelState.IsValid)
             {
                 photo.Id = Guid.NewGuid();
+               
+                if (uploadedFile != null)
+                {
+                    string path = "/files/" + uploadedFile.FileName;
+                    using (var fileStream = new FileStream(_appEnvironment.WebRootPath + path, FileMode.OpenOrCreate))
+                    {
+                        await uploadedFile.CopyToAsync(fileStream);
+                    }
+                    photo.URL = path;
+
+                }
                 _context.Add(photo);
+                if(resourceFile!=null)
+                {
+                    string path = "/resourceFiles/" + resourceFile.FileName;
+                    using (var fileStream = new FileStream(_appEnvironment.WebRootPath + path, FileMode.OpenOrCreate))
+                    {
+                        await resourceFile.CopyToAsync(fileStream);
+
+                    }
+                    ResourceFile resourceFileModel = new ResourceFile() { Id = Guid.NewGuid(), Enabled = true, ResourceFilePath = path, ResourceId = photo.Id , ContentType= resourceFile.ContentType};
+                    _context.ResourceFiles.Add(resourceFileModel);
+                }
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
@@ -92,7 +119,7 @@ namespace ArtStudio.Controllers
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(Guid id, [Bind("URL,Resolution,Size,Tags,Price,CategoryId,Description,Id,DisplayAlias,Enabled")] Photo photo)
+        public async Task<IActionResult> Edit(Guid id, [Bind("URL,Resolution,Size,Tags,CategoryId,Description,Id,DisplayAlias,Enabled")] Photo photo, IFormFile uploadedFile, IFormFile resourceFile)
         {
             if (id != photo.Id)
             {
@@ -103,7 +130,38 @@ namespace ArtStudio.Controllers
             {
                 try
                 {
+                    if (uploadedFile != null)
+                    {
+                        string path = "/files/" + uploadedFile.FileName;
+                        using (var fileStream = new FileStream(_appEnvironment.WebRootPath + path, FileMode.OpenOrCreate))
+                        {
+                            await uploadedFile.CopyToAsync(fileStream);
+                        }
+                        photo.URL = path;
+
+                    }
                     _context.Update(photo);
+                    if (resourceFile != null)
+                    {
+                        string path = "/resourceFiles/" + resourceFile.FileName;
+                        using (var fileStream = new FileStream(_appEnvironment.WebRootPath + path, FileMode.OpenOrCreate))
+                        {
+                            await resourceFile.CopyToAsync(fileStream);
+                        }
+                        ResourceFile resourceFileModel = _context.ResourceFiles.FirstOrDefault(r => r.ResourceId == photo.Id);
+                        if (resourceFileModel == null)
+                        {
+                            resourceFileModel = new ResourceFile() { Id = Guid.NewGuid(), Enabled = true, ResourceFilePath = path, ResourceId = photo.Id, ContentType = resourceFile.ContentType };
+                            _context.ResourceFiles.Add(resourceFileModel);
+                        }
+                        else
+                        {
+                            resourceFileModel.ResourceFilePath = path;
+                            resourceFileModel.ContentType = resourceFile.ContentType;
+                            _context.ResourceFiles.Update(resourceFileModel);
+                        }
+                       
+                    }
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)

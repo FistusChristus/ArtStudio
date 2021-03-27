@@ -27,17 +27,21 @@ namespace ArtStudio.Models
         public string Resolution { get; set; }
         public string Size { get; set; }
         public string Tags { get; set; }
-        public double Price { get; set; }
         public Category Category { get; set; }
         public Guid CategoryId { get; set; }
+    }
+    public class ResourceFile : EntityData
+    {
+        public string ResourceFilePath { get; set; }
+        public string ContentType { get; set; }
+        public Resource Resource { get; set; }
+        public Guid ResourceId { get; set; }
     }
 
     public class Photo : Resource
     {
     }
-    public  class Video : Resource
-    {
-    }
+
 
     public class Section: EntityData
     {
@@ -62,6 +66,7 @@ namespace ArtStudio.Models
         public DateTime EndDate { get; set; }
         public ApplicationUser ApplicationUser { get; set; }
         public Guid ApplicationUserId { get; set; }
+        public int CountOfDownload { get; set; }
     }
     public class UserCartContent : EntityData
     {

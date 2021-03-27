@@ -11,7 +11,7 @@ using ArtStudio.Models;
 using ArtStudio.Services;
 using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.ResponseCompression;
-
+using ArtStudio.Shared;
 
 namespace ArtStudio
 {
@@ -56,8 +56,8 @@ namespace ArtStudio
             services.AddTransient<RequestService>();
             services.AddTransient<SessionService>();
             services.AddTransient<EntityService>();
+            services.AddTransient<UserService>();
             services.AddTransient<HttpContextAccessor>();
-
             services.AddAuthorization(opts =>
             {
                 opts.AddPolicy("Authorized", policy =>

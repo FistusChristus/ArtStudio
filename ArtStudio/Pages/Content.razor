@@ -14,13 +14,9 @@
     <MudGrid Spacing="1">
         <MudItem xs=8 Class="" Style="min-width:900px">
             <div class="d-flex">
-                @if (Type.ToLower() == "video")
-                {
-                    <VideoConstructor ContainerClass="content_video d-flex" Height="550px"></VideoConstructor>
-                }
                 @if (Type.ToLower() == "photo")
                 {
-                    <ImageConstructor ContainerClass="content_video d-flex" Height="550px"></ImageConstructor>
+                    <ImageConstructor ContainerClass="content_video d-flex" Height="550px" Src="@ContentResource.URL"></ImageConstructor>
                 }
 
             </div>
