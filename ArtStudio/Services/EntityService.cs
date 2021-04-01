@@ -8,7 +8,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text.Json;
 using System.Threading.Tasks;
-using static ArtStudio.Data.Interfaces.Interfaces;
 
 namespace ArtStudio.Services
 {
@@ -27,7 +26,7 @@ namespace ArtStudio.Services
         {
             if (String.IsNullOrEmpty(userId.ToString()) || String.IsNullOrEmpty(resourceId.ToString()))
                 throw new ArgumentNullException();
-            UserCartContent userCartContent = new UserCartContent { ApplicationUserId = userId, ResourceId = resourceId, Enabled = true, Id = Guid.NewGuid() };
+            UserCartContent userCartContent = new UserCartContent { ApplicationUserId = userId.ToString(), ResourceId = resourceId, Enabled = true, Id = Guid.NewGuid(), DisplayAlias="" };
             dBContext.UserCartContents.Add(userCartContent);
             dBContext.SaveChanges();
             return true;
@@ -36,7 +35,7 @@ namespace ArtStudio.Services
         {
             if (String.IsNullOrEmpty(userId.ToString()) || String.IsNullOrEmpty(resourceId.ToString()))
                 throw new ArgumentNullException();
-            UserCartContent userCartContent = dBContext.UserCartContents.FirstOrDefault(c=>c.ResourceId== resourceId && c.ApplicationUserId==userId);
+            UserCartContent userCartContent = dBContext.UserCartContents.FirstOrDefault(c=>c.ResourceId== resourceId && c.ApplicationUserId==userId.ToString());
             if(userCartContent==null)
                 throw new NullReferenceException();
 

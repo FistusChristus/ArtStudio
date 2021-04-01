@@ -5,6 +5,7 @@
 @using System.Linq
 @using ArtStudio.Services
 @using Microsoft.EntityFrameworkCore;
+@using ArtStudio.Data;
 @inject ApplicationDBContext dBContext
 @inject HttpContextAccessor context
 @inject SessionService sessionService
@@ -23,9 +24,9 @@
                     <NavLink href="@href">
                         <MudCardMedia Image="@item.URL" Height="200" />
                         <MudCardContent>
-                            <MudText Color="MudBlazor.Color.Dark" Typo="Typo.h5">@item.DisplayAlias</MudText>
-                            <MudText Color="MudBlazor.Color.Dark" Typo="Typo.body2">@item.Category.DisplayAlias</MudText>
-                            <MudText Color="MudBlazor.Color.Dark" Typo="Typo.body2">@item.Description</MudText>
+                            <MudText Color="MudBlazor.Color.Dark" Typo="Typo.h5">@item.DisplayAlias.SafeSubstring(23)</MudText>
+                            <MudText Color="MudBlazor.Color.Dark" Typo="Typo.subtitle1">@item.Category.DisplayAlias</MudText>
+                            <MudText Color="MudBlazor.Color.Dark" Typo="Typo.body2">@item.Description.SafeSubstring(200)</MudText>
                         </MudCardContent>
                     </NavLink>
                     <MudCardActions>
@@ -42,7 +43,7 @@
     [CascadingParameter]
     private Task<AuthenticationState> authenticationStateTask { get; set; }
     public List<Resource> ResourcesList = new List<Resource>();
-    public Session session = null;
+    public AppSession session = null;
     [Inject] private IDialogService DialogService { get; set; }
 
     protected override void OnInitialized()
@@ -56,7 +57,7 @@
         Color result = Color.Default;
         if (session != null)
         {
-            bool isInCart = dBContext.UserCartContents.Any(c => c.ApplicationUserId == session.Id && c.ResourceId == resource.Id && c.Enabled);
+            bool isInCart = dBContext.UserCartContents.Any(c => c.ApplicationUserId == session.Id.ToString() && c.ResourceId == resource.Id && c.Enabled);
 
             result = isInCart ? Color.Primary : Color.Default;
         }
@@ -70,7 +71,7 @@
             navigationManager.NavigateTo("login");
         else
         {
-            bool isInCart = dBContext.UserCartContents.Any(c => c.ApplicationUserId == session.Id && c.ResourceId == resource.Id);
+            bool isInCart = dBContext.UserCartContents.Any(c => c.ApplicationUserId == session.Id.ToString() && c.ResourceId == resource.Id);
 
 
             if (isInCart)

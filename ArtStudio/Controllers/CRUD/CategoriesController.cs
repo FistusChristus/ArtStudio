@@ -7,9 +7,11 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using ArtStudio;
 using ArtStudio.Models;
+using Microsoft.AspNetCore.Authorization;
 
 namespace ArtStudio.Controllers.CRUD
 {
+    [Authorize(Policy = "Admin")]
     public class CategoriesController : Controller
     {
         private readonly ApplicationDBContext _context;
@@ -22,7 +24,7 @@ namespace ArtStudio.Controllers.CRUD
         // GET: Categories
         public async Task<IActionResult> Index()
         {
-            var applicationDBContext = _context.Categories.Include(c => c.Section);
+            var applicationDBContext = _context.Categories;
             return View(await applicationDBContext.ToListAsync());
         }
 
@@ -35,7 +37,6 @@ namespace ArtStudio.Controllers.CRUD
             }
 
             var category = await _context.Categories
-                .Include(c => c.Section)
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (category == null)
             {
@@ -48,7 +49,6 @@ namespace ArtStudio.Controllers.CRUD
         // GET: Categories/Create
         public IActionResult Create()
         {
-            ViewData["SectionId"] = new SelectList(_context.Sections, "Id", "DisplayAlias");
             return View();
         }
 
@@ -57,7 +57,7 @@ namespace ArtStudio.Controllers.CRUD
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("SectionId,Description,Id,DisplayAlias,Enabled")] Category category)
+        public async Task<IActionResult> Create([Bind("Description,Id,DisplayAlias,Enabled")] Category category)
         {
             if (ModelState.IsValid)
             {
@@ -66,7 +66,6 @@ namespace ArtStudio.Controllers.CRUD
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["SectionId"] = new SelectList(_context.Sections, "Id", "DisplayAlias", category.SectionId);
             return View(category);
         }
 
@@ -83,7 +82,7 @@ namespace ArtStudio.Controllers.CRUD
             {
                 return NotFound();
             }
-            ViewData["SectionId"] = new SelectList(_context.Sections, "Id", "DisplayAlias", category.SectionId);
+
             return View(category);
         }
 
@@ -92,7 +91,7 @@ namespace ArtStudio.Controllers.CRUD
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(Guid id, [Bind("SectionId,Description,Id,DisplayAlias,Enabled")] Category category)
+        public async Task<IActionResult> Edit(Guid id, [Bind("Description,Id,DisplayAlias,Enabled")] Category category)
         {
             if (id != category.Id)
             {
@@ -119,7 +118,6 @@ namespace ArtStudio.Controllers.CRUD
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["SectionId"] = new SelectList(_context.Sections, "Id", "DisplayAlias", category.SectionId);
             return View(category);
         }
 
@@ -132,7 +130,6 @@ namespace ArtStudio.Controllers.CRUD
             }
 
             var category = await _context.Categories
-                .Include(c => c.Section)
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (category == null)
             {

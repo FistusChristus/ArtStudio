@@ -51,14 +51,16 @@ namespace ArtStudio.Controllers
             if (!_userService.IsCanDownload())
                 return NotFound();
 
-            Session session = _sessionService.GetSession();
-            List<UserCartContent> userCartContents = _context.UserCartContents.Include(c => c.Resource).Where(c => c.ApplicationUserId == session.Id).ToList();
+            AppSession session = _sessionService.GetSession();
+            List<UserCartContent> userCartContents = _context.UserCartContents.Include(c => c.Resource).Where(c => c.ApplicationUserId == session.Id.ToString()).ToList();
             List<Resource> resourcesInCart = userCartContents.Select(c => c.Resource).ToList();
             List<FileTransfer> transferFilesList = new List<FileTransfer>();
             foreach (var resource in resourcesInCart)
             {
                 string path = _context.ResourceFiles.FirstOrDefault(r => r.ResourceId == resource.Id).ResourceFilePath;
-                transferFilesList.Add(new FileTransfer(path, resource.DisplayAlias));
+                if (path == null)
+                    return LocalRedirect("/404");
+                    transferFilesList.Add(new FileTransfer(path, resource.DisplayAlias));
             }
 
             MemoryStream outputMemStream = new MemoryStream();

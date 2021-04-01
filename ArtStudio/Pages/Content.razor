@@ -12,7 +12,7 @@
 @inject EntityService entityService
 <div class="p-3 w-100 d-flex d-wrap">
     <MudGrid Spacing="1">
-        <MudItem xs=8 Class="" Style="min-width:900px">
+        <MudItem xs=7 Class="" Style="min-width:900px">
             <div class="d-flex">
                 @if (Type.ToLower() == "photo")
                 {
@@ -21,7 +21,7 @@
 
             </div>
         </MudItem>
-        <MudItem xs=4 Class="" Style="max-width:500px!important">
+        <MudItem xs=5 Class="" Style="max-width:500px!important">
             <div class="content_header">
                 <div class="content_name font-weight-bold">@ContentResource.DisplayAlias</div>
             </div>
@@ -32,6 +32,10 @@
             </div>
             <div class="divider mt-2 mb-2 ml-3 mr-3 "></div>
             <div class="properties_block">
+                <div class="property">
+                    <div class="property_name font-weight-bold">Категория</div>
+                    <div class="property_value secondary-text">@ContentResource.Category.DisplayAlias</div>
+                </div>
                 <div class="property">
                     <div class="property_name font-weight-bold">Описание</div>
                     <div class="property_value secondary-text">@ContentResource.Description</div>
@@ -44,7 +48,7 @@
                     </div>
                     <div class="d-flex justify-space-between">
                         <div class="property_sub">Размер</div>
-                        <div class="property_value secondary-text">@ContentResource.Size</div>
+                        <div class="property_value secondary-text">@ContentResource.Size KB</div>
                     </div>
 
                 </div>
@@ -89,7 +93,7 @@
             navigationManager.NavigateTo("/");
         if (sessionService.GetSession() != null)
         {
-            isInCart = dBContext.UserCartContents.Any(c => c.ResourceId == Guid.Parse(Id) && c.ApplicationUserId == Guid.Parse(sessionService.GetUserId()));
+            isInCart = dBContext.UserCartContents.Any(c => c.ResourceId == Guid.Parse(Id) && c.ApplicationUserId == sessionService.GetUserId());
             ButtonText = isInCart ? "Удалить с корзины" : "Добавить в корзину";
         }
         else

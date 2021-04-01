@@ -10,9 +10,12 @@ using ArtStudio.Models;
 using Microsoft.AspNetCore.Http;
 using System.IO;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Authorization;
+using System.Drawing;
 
 namespace ArtStudio.Controllers
 {
+    [Authorize(Policy = "Admin")]
     public class PhotosController : Controller
     {
         private readonly ApplicationDBContext _context;
@@ -53,7 +56,7 @@ namespace ArtStudio.Controllers
         // GET: Photos/Create
         public IActionResult Create()
         {
-            ViewData["CategoryId"] = new SelectList(_context.Categories, "Id", "DisplayAlias");
+            ViewData["CategoryId"] = new SelectList(_context.Categories.OrderBy(c => c.DisplayAlias), "Id", "DisplayAlias");
             return View();
         }
 
@@ -62,24 +65,29 @@ namespace ArtStudio.Controllers
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Resolution,Size,Tags,CategoryId,Description,Id,DisplayAlias,Enabled")] Photo photo, IFormFile uploadedFile, IFormFile resourceFile)
+        public async Task<IActionResult> Create([Bind("Tags,CategoryId,Description,Id,DisplayAlias,Enabled")] Photo photo, IFormFile uploadedFile, IFormFile resourceFile)
         {
             if (ModelState.IsValid)
             {
                 photo.Id = Guid.NewGuid();
-               
+
                 if (uploadedFile != null)
                 {
                     string path = "/files/" + uploadedFile.FileName;
                     using (var fileStream = new FileStream(_appEnvironment.WebRootPath + path, FileMode.OpenOrCreate))
                     {
                         await uploadedFile.CopyToAsync(fileStream);
+                        photo.Size = (fileStream.Length / 1000).ToString();
+                        var img = Image.FromStream(fileStream);
+                        photo.Resolution = img.Width + " x " + img.Height;
                     }
                     photo.URL = path;
 
+
                 }
+
                 _context.Add(photo);
-                if(resourceFile!=null)
+                if (resourceFile != null)
                 {
                     string path = "/resourceFiles/" + resourceFile.FileName;
                     using (var fileStream = new FileStream(_appEnvironment.WebRootPath + path, FileMode.OpenOrCreate))
@@ -87,13 +95,13 @@ namespace ArtStudio.Controllers
                         await resourceFile.CopyToAsync(fileStream);
 
                     }
-                    ResourceFile resourceFileModel = new ResourceFile() { Id = Guid.NewGuid(), Enabled = true, ResourceFilePath = path, ResourceId = photo.Id , ContentType= resourceFile.ContentType};
+                    ResourceFile resourceFileModel = new ResourceFile() { Id = Guid.NewGuid(), Enabled = true, ResourceFilePath = path, ResourceId = photo.Id, ContentType = resourceFile.ContentType, DisplayAlias="" };
                     _context.ResourceFiles.Add(resourceFileModel);
                 }
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["CategoryId"] = new SelectList(_context.Categories, "Id", "DisplayAlias", photo.CategoryId);
+            ViewData["CategoryId"] = new SelectList(_context.Categories.OrderBy(c => c.DisplayAlias), "Id", "DisplayAlias", photo.CategoryId);
             return View(photo);
         }
 
@@ -110,7 +118,7 @@ namespace ArtStudio.Controllers
             {
                 return NotFound();
             }
-            ViewData["CategoryId"] = new SelectList(_context.Categories, "Id", "DisplayAlias", photo.CategoryId);
+            ViewData["CategoryId"] = new SelectList(_context.Categories.OrderBy(c=>c.DisplayAlias), "Id", "DisplayAlias", photo.CategoryId);
             return View(photo);
         }
 
@@ -136,9 +144,11 @@ namespace ArtStudio.Controllers
                         using (var fileStream = new FileStream(_appEnvironment.WebRootPath + path, FileMode.OpenOrCreate))
                         {
                             await uploadedFile.CopyToAsync(fileStream);
+                            photo.Size = (fileStream.Length / 1000).ToString();
+                            var img = Image.FromStream(fileStream);
+                            photo.Resolution = img.Width + " x " + img.Height;
                         }
                         photo.URL = path;
-
                     }
                     _context.Update(photo);
                     if (resourceFile != null)
@@ -151,7 +161,7 @@ namespace ArtStudio.Controllers
                         ResourceFile resourceFileModel = _context.ResourceFiles.FirstOrDefault(r => r.ResourceId == photo.Id);
                         if (resourceFileModel == null)
                         {
-                            resourceFileModel = new ResourceFile() { Id = Guid.NewGuid(), Enabled = true, ResourceFilePath = path, ResourceId = photo.Id, ContentType = resourceFile.ContentType };
+                            resourceFileModel = new ResourceFile() { Id = Guid.NewGuid(), Enabled = true, ResourceFilePath = path, ResourceId = photo.Id, ContentType = resourceFile.ContentType, DisplayAlias="" };
                             _context.ResourceFiles.Add(resourceFileModel);
                         }
                         else
@@ -160,7 +170,7 @@ namespace ArtStudio.Controllers
                             resourceFileModel.ContentType = resourceFile.ContentType;
                             _context.ResourceFiles.Update(resourceFileModel);
                         }
-                       
+
                     }
                     await _context.SaveChangesAsync();
                 }
@@ -177,7 +187,7 @@ namespace ArtStudio.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["CategoryId"] = new SelectList(_context.Categories, "Id", "DisplayAlias", photo.CategoryId);
+            ViewData["CategoryId"] = new SelectList(_context.Categories.OrderBy(c => c.DisplayAlias), "Id", "DisplayAlias", photo.CategoryId);
             return View(photo);
         }
 

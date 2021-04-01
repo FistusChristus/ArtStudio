@@ -4,7 +4,6 @@ using System.Threading.Tasks;
 using ArtStudio.Services;
 using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.Http;
-using static ArtStudio.Data.Interfaces.Interfaces;
 
 
     public class HttpContextAccessor

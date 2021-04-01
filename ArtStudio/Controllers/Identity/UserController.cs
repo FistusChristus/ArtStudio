@@ -3,7 +3,6 @@ using ArtStudio.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authorization;
-using static ArtStudio.Data.Interfaces.Interfaces;
 using System.Threading.Tasks;
 using ArtStudio.Services;
 

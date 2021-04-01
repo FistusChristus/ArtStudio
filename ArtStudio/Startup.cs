@@ -11,7 +11,7 @@ using ArtStudio.Models;
 using ArtStudio.Services;
 using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.ResponseCompression;
-using ArtStudio.Shared;
+using ArtStudio.Data;
 
 namespace ArtStudio
 {
@@ -20,6 +20,7 @@ namespace ArtStudio
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
+            Extensions.SetConfiguration(configuration);
         }
 
         public IConfiguration Configuration { get; }
@@ -38,12 +39,7 @@ namespace ArtStudio
 
             services.AddDistributedMemoryCache();
 
-            services.AddSession(options =>
-            {
-                options.IdleTimeout = TimeSpan.FromSeconds(10);
-                options.Cookie.HttpOnly = true;
-                options.Cookie.IsEssential = true;
-            });
+            services.AddSession();
 
             services.AddControllersWithViews();
             services.AddControllers();
@@ -53,7 +49,6 @@ namespace ArtStudio
             services.AddAuthentication();
                 
 
-            services.AddTransient<RequestService>();
             services.AddTransient<SessionService>();
             services.AddTransient<EntityService>();
             services.AddTransient<UserService>();

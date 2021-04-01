@@ -9,7 +9,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text.Json;
 using System.Threading.Tasks;
-using static ArtStudio.Data.Interfaces.Interfaces;
 
 namespace ArtStudio.Services
 {
@@ -46,7 +45,7 @@ namespace ArtStudio.Services
         }
         public int GetUserCountOfPackages()
         {
-            return dbContext.PackageInfos.Where(p => p.ApplicationUserId == Guid.Parse(sessionService.GetUserId())).Count();
+            return dbContext.PaymentInfos.Where(p => p.ApplicationUserId == sessionService.GetUserId()).Count();
         } 
         public async Task ReduceCountOfDownload(int count)
         {
@@ -55,7 +54,14 @@ namespace ArtStudio.Services
             user.CountOfDownload -= count;
             user.CountOfSuccessDownload += count;
             await userManager.UpdateAsync(user);
-        } 
+        }
+        public async Task AddCountOfDownload(int count)
+        {
+            string userId = sessionService.GetUserId();
+            var user = dbContext.Users.FirstOrDefault(u => u.Id == userId);
+            user.CountOfDownload = count;
+            await userManager.UpdateAsync(user);
+        }
         public async Task ClearResourcesInCart(List<UserCartContent> userCartContents)
         {
             foreach (var item in userCartContents)

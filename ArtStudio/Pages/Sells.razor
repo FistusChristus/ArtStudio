@@ -1,0 +1,36 @@
+﻿@page "/sells"
+@using MudBlazor
+@using ArtStudio.Models
+@using Microsoft.EntityFrameworkCore
+@inject ApplicationDBContext dbcontext
+@layout AdminLayout
+    <MudTable Items="@Payments" Hover="true" SortLabel="Sort By" Striped="@true" Style="color:rgba(0, 0, 0, 0.70); width:100%;">
+        <HeaderContent>
+            <MudTh><MudTableSortLabel SortBy="new Func<PaymentInfo, object>(x=>x.ApplicationUser.Email)">Клиент</MudTableSortLabel></MudTh>
+            <MudTh><MudTableSortLabel SortBy="new Func<PaymentInfo, object>(x=>x.Package.DisplayAlias)">Пакет</MudTableSortLabel></MudTh>
+            <MudTh><MudTableSortLabel SortBy="new Func<PaymentInfo, object>(x=>x.CountOfDownload)">Добавлено скачиваний</MudTableSortLabel></MudTh>
+            <MudTh><MudTableSortLabel SortBy="new Func<PaymentInfo, object>(x=>x.StartDate)">Дата покупки</MudTableSortLabel></MudTh>
+            <MudTh><MudTableSortLabel SortBy="new Func<PaymentInfo, object>(x=>x.EndDate)">Дата истичения срока пакета</MudTableSortLabel></MudTh>
+
+        </HeaderContent>
+        <RowTemplate>
+            <MudTd DataLabel="Клиент">@context.ApplicationUser.Email</MudTd>
+            <MudTd DataLabel="Пакет">@context.Package.DisplayAlias</MudTd>
+            <MudTd DataLabel="Добавлено скачиваний">@context.CountOfDownload</MudTd>
+            <MudTd DataLabel="Дата покупки">@context.StartDate</MudTd>
+            <MudTd DataLabel="Дата истичения срока пакета">@context.EndDate</MudTd>
+        </RowTemplate>
+        <PagerContent >
+            <MudTablePager/>
+        </PagerContent>
+    </MudTable>
+@code {
+
+    public List<PaymentInfo> Payments = new List<PaymentInfo>();
+
+    protected override void OnInitialized()
+    {
+        
+        Payments = dbcontext.PaymentInfos.Include(p => p.ApplicationUser).Include(p => p.Package).OrderBy(p => p.StartDate).ToList();
+    }
+}

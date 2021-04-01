@@ -19,10 +19,4 @@
 
         private Task<AuthenticationState> authenticationStateTask { get; set; }
 
-        bool IsAuthorized { get; set; }
-
-        protected override void OnInitialized()
-        {
-            IsAuthorized = sessionService.IsAuthenticated;
-        }
     }

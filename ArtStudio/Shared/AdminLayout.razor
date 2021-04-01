@@ -1,0 +1,124 @@
+﻿@using ArtStudio.Services
+@using ArtStudio.Models
+@using MudBlazor
+@inject ApplicationDBContext dBContext
+@inject SessionService SessionService
+@inherits LayoutComponentBase
+
+<link rel="stylesheet" href="css/bootstrap/bootstrap.min.css" />
+<link href="css/site.css" rel="stylesheet" />
+<link href="fonts/Gilroy/font.css" rel="stylesheet" />
+
+<!--Blazor:{"sequence":0,"type":"server","prerenderId":"5b4de2d832e84673b26c4eadf738322e","descriptor":"CfDJ8FzCDViDvUlFsmg0wvXLKAwHqmh1J05hMA77LqWAbPoUaLvdY3AU0xw39E2\u002BYGnR/ZTw\u002B0Y6VhIiBGBcDZbZrz6uOGLEw92M4UDftv3y5shiU9/a0C9ujGKUaMix\u002BR8tYlXQCR1U9yg9VBy7OtakOcOdDpJoYDVg3HovsGwuy3EBOurzdsOF8jrwWp1B5IbGcj/s\u002B24E2emuqvIvTBhG5HrofzNkqyES66xG37VUVfs/IhH8qoUqXIQR4Hh3vJX3101TAmLSharL3EHTQMU1/oPi6mJymtY6fMhtWuYgPzKLfzuaBfAsu3ykhPTeM0NX7o9aNwxIHO4cgCOpu3xrkNGH/O/AFSPnL\u002B5UpoKUTQs3"}-->
+
+<div class="mud-layout leyaout">
+    <header class="mud-appbar mud-appbar-dense mud-appbar-fixed mud-elevation-1">
+        <div class="mud-toolbar mud-toolbar-dense mud-toolbar-gutters mud-toolbar-appbar">
+
+            <div class=""><span class="header_brand">Админ панель</span></div>
+            <div class="flex-grow-1"></div>
+            <div class="ml-auto d-flex" style="align-items:center">
+                <div class="flex-grow-1"></div>
+                <div class="d-flex justify-content-center align-items-center">
+                    <a href="/" class="shine-button ">Вернуться на главную</a>
+                </div>
+                <div class="flex-grow-1"></div>
+            </div>
+        </div>
+    </header>
+    <aside style="left:0; top:48px; width:205px;" class="mud-drawer mud-drawer-fixed mud-drawer-anchor-left mud-drawer--closed mud-drawer--initial mud-drawer-md mud-drawer-clipped-never mud-elevation-1 mud-drawer-responsive sidebar-bg">
+        <div class="mud-drawer-content">
+            <div class="mud-navmenu" style="color:white; font-family:Gilroy">
+                <div class="mud-nav-item mud-ripple">
+                    <a href="photos/index" class="mud-nav-link">
+                        <div Class="mud-nav-link-text">
+                            Фото
+                        </div>
+                    </a>
+                </div>
+            </div>
+            <div class="mud-navmenu" style="color:white; font-family:Gilroy">
+                <div class="mud-nav-item mud-ripple">
+                    <a href="categories/index" class="mud-nav-link">
+                        <div Class="mud-nav-link-text">
+                            Категории
+                        </div>
+                    </a>
+                </div>
+            </div>
+            <div class="mud-navmenu" style="color:white; font-family:Gilroy">
+                <div class="mud-nav-item mud-ripple">
+                    <a href="packages/index" class="mud-nav-link">
+                        <div Class="mud-nav-link-text">
+                            Пакеты
+                        </div>
+                    </a>
+                </div>
+            </div>
+            <div class="mud-navmenu" style="color:white; font-family:Gilroy">
+                <div class="mud-nav-item mud-ripple">
+                    <a href="/sells" class="mud-nav-link">
+                        <div Class="mud-nav-link-text">
+                            Продажи
+                        </div>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </aside>
+
+    <div style="position:absolute; padding:90px; width:calc(100% - 205px); left:205px;" class="mud-main-content">
+        @Body
+    </div>
+</div>
+
+<MudThemeProvider Theme="SWPO"></MudThemeProvider>
+<MudDialogProvider></MudDialogProvider>
+<MudSnackbarProvider></MudSnackbarProvider>
+
+@code{
+
+
+    public AppSession Session { get; set; }
+    public List<Category> Categories { get; set; }
+
+    protected override void OnInitialized()
+    {
+        Session = SessionService.GetSession();
+    }
+
+    MudTheme SWPO = new MudTheme()
+    {
+        Palette = new Palette()
+        {
+            Primary = "#9184EF",
+            Secondary = "#4A5665",
+            AppbarBackground = "#21272F",
+            DrawerBackground = "#21272F",
+            TextPrimary = "#ffffff",
+            Divider = "#ffffff",
+            PrimaryContrastText = "#ffffff",
+            SecondaryContrastText = "rgba(255, 255, 255, 0.7);"
+
+        },
+
+        LayoutProperties = new LayoutProperties()
+        {
+            AppbarMinHeight = "0",
+            DrawerWidthLeft = "260px",
+            DrawerWidthRight = "300px",
+
+
+        },
+
+        ZIndex = new ZIndex()
+        {
+
+        },
+        Typography = new Typography()
+        {
+        }
+
+    };
+}
+

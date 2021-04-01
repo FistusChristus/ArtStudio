@@ -2,7 +2,6 @@
 using System.Threading.Tasks;
 using ArtStudio.Services;
 using Microsoft.AspNetCore.Components.Authorization;
-using static ArtStudio.Data.Interfaces.Interfaces;
 
 public class AuthStateProvider : AuthenticationStateProvider
 {

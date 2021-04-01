@@ -1,6 +1,7 @@
 ﻿@page "/cart"
 @using ArtStudio.Component
 @using ArtStudio.Models
+@using ArtStudio.Data
 @using ArtStudio.Services
 @using MudBlazor
 @using System.Linq
@@ -29,9 +30,9 @@
                     <NavLink href="@href">
                         <MudCardMedia Image="@item.URL" Height="200" />
                         <MudCardContent>
-                            <MudText Color="MudBlazor.Color.Dark" Typo="Typo.h5">@item.DisplayAlias</MudText>
-                            <MudText Color="MudBlazor.Color.Dark" Typo="Typo.body2">@item.Category.DisplayAlias</MudText>
-                            <MudText Color="MudBlazor.Color.Dark" Typo="Typo.body2">@item.Description</MudText>
+                            <MudText Color="MudBlazor.Color.Dark" Typo="Typo.h5">@item.DisplayAlias.SafeSubstring(23)</MudText>
+                            <MudText Color="MudBlazor.Color.Dark" Typo="Typo.subtitle1">@item.Category.DisplayAlias</MudText>
+                            <MudText Color="MudBlazor.Color.Dark" Typo="Typo.body2">@item.Description.SafeSubstring(200)</MudText>
                         </MudCardContent>
                     </NavLink>
                     <MudCardActions>
@@ -53,14 +54,14 @@
 
 @code {
     public List<Resource> ResourcesInCartList = new List<Resource>();
-    public Session session = null;
+    public AppSession session = null;
     protected override void OnInitialized()
     {
         session = sessionService.GetSession();
         if (session == null)
             navigationManager.NavigateTo("/");
 
-        ResourcesInCartList = dBContext.UserCartContents.Include(c => c.Resource).Where(c => c.ApplicationUserId == session.Id && c.Enabled).Select(c => c.Resource).ToList();
+        ResourcesInCartList = dBContext.UserCartContents.Include(c => c.Resource).Where(c => c.ApplicationUserId == session.Id.ToString() && c.Enabled).Select(c => c.Resource).ToList();
     }
     public void DeleteFromCart(Resource resource)
     {

@@ -5,11 +5,9 @@
     Layout = "~/Views/Shared/_AdminLeyaout.cshtml";
 }
 @addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
-<h1>Index</h1>
+<h1>Список всех пакетов</h1>
 
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
+
 <table class="table table-dark table-striped">
     <thead>
         <tr>
@@ -18,9 +16,6 @@
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.Price)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Description)
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.DisplayAlias)
@@ -45,9 +40,6 @@
                 @Html.DisplayFor(modelItem => item.Price)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Description)
-            </td>
-            <td>
                 @Html.DisplayFor(modelItem => item.DisplayAlias)
             </td>
             <td>
@@ -57,9 +49,9 @@
                 @Html.DisplayFor(modelItem => item.Enabled)
             </td>
             <td>
-                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                <a asp-action="Edit" asp-route-id="@item.Id">Изменить</a> |
+                <a asp-action="Details" asp-route-id="@item.Id">Подробнее</a> |
+                <a asp-action="Delete" asp-route-id="@item.Id">Удалить</a>
             </td>
         </tr>
         }

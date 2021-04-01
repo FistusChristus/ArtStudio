@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "GtKGPZXEWSLM14+LeruraKEsUkxiMxvSb1KE6JjrDoJGNUKdRhTg81eTpvT7U7piygGUrWihjnVL/O2v7Tw63A==",
+  "dgSpecHash": "W4nONGJ5h9Y81/z2N1+V4iuP0zblDLqzbAFjSry2ny4dZ2FmWQ5a0sJQh9C60hLOTNO4VkB7B4hfK+mHRAL3aQ==",
   "success": true,
   "projectFilePath": "C:\\Users\\pervi\\Desktop\\New folder\\SWPO\\ArtStudio\\ArtStudio.csproj",
   "expectedPackageFiles": [
@@ -57,7 +57,7 @@
     "C:\\Users\\pervi\\.nuget\\packages\\microsoft.identitymodel.protocols.openidconnect\\5.6.0\\microsoft.identitymodel.protocols.openidconnect.5.6.0.nupkg.sha512",
     "C:\\Users\\pervi\\.nuget\\packages\\microsoft.identitymodel.tokens\\5.6.0\\microsoft.identitymodel.tokens.5.6.0.nupkg.sha512",
     "C:\\Users\\pervi\\.nuget\\packages\\microsoft.jsinterop\\3.1.12\\microsoft.jsinterop.3.1.12.nupkg.sha512",
-    "C:\\Users\\pervi\\.nuget\\packages\\microsoft.netcore.platforms\\3.1.0\\microsoft.netcore.platforms.3.1.0.nupkg.sha512",
+    "C:\\Users\\pervi\\.nuget\\packages\\microsoft.netcore.platforms\\5.0.0\\microsoft.netcore.platforms.5.0.0.nupkg.sha512",
     "C:\\Users\\pervi\\.nuget\\packages\\microsoft.netcore.targets\\1.1.3\\microsoft.netcore.targets.1.1.3.nupkg.sha512",
     "C:\\Users\\pervi\\.nuget\\packages\\microsoft.visualstudio.web.codegeneration\\3.1.5\\microsoft.visualstudio.web.codegeneration.3.1.5.nupkg.sha512",
     "C:\\Users\\pervi\\.nuget\\packages\\microsoft.visualstudio.web.codegeneration.contracts\\3.1.5\\microsoft.visualstudio.web.codegeneration.contracts.3.1.5.nupkg.sha512",
@@ -69,11 +69,12 @@
     "C:\\Users\\pervi\\.nuget\\packages\\microsoft.visualstudio.web.codegenerators.mvc\\3.1.5\\microsoft.visualstudio.web.codegenerators.mvc.3.1.5.nupkg.sha512",
     "C:\\Users\\pervi\\.nuget\\packages\\microsoft.win32.primitives\\4.3.0\\microsoft.win32.primitives.4.3.0.nupkg.sha512",
     "C:\\Users\\pervi\\.nuget\\packages\\microsoft.win32.registry\\4.7.0\\microsoft.win32.registry.4.7.0.nupkg.sha512",
-    "C:\\Users\\pervi\\.nuget\\packages\\microsoft.win32.systemevents\\4.7.0\\microsoft.win32.systemevents.4.7.0.nupkg.sha512",
+    "C:\\Users\\pervi\\.nuget\\packages\\microsoft.win32.systemevents\\5.0.0\\microsoft.win32.systemevents.5.0.0.nupkg.sha512",
     "C:\\Users\\pervi\\.nuget\\packages\\mudblazor\\2.0.5\\mudblazor.2.0.5.nupkg.sha512",
     "C:\\Users\\pervi\\.nuget\\packages\\netstandard.library\\1.6.1\\netstandard.library.1.6.1.nupkg.sha512",
     "C:\\Microsoft\\Xamarin\\NuGet\\newtonsoft.json\\11.0.2\\newtonsoft.json.11.0.2.nupkg.sha512",
     "C:\\Users\\pervi\\.nuget\\packages\\nuget.frameworks\\4.7.0\\nuget.frameworks.4.7.0.nupkg.sha512",
+    "C:\\Users\\pervi\\.nuget\\packages\\paypal\\1.9.1\\paypal.1.9.1.nupkg.sha512",
     "C:\\Microsoft\\Xamarin\\NuGet\\runtime.debian.8-x64.runtime.native.system.security.cryptography.openssl\\4.3.0\\runtime.debian.8-x64.runtime.native.system.security.cryptography.openssl.4.3.0.nupkg.sha512",
     "C:\\Microsoft\\Xamarin\\NuGet\\runtime.fedora.23-x64.runtime.native.system.security.cryptography.openssl\\4.3.0\\runtime.fedora.23-x64.runtime.native.system.security.cryptography.openssl.4.3.0.nupkg.sha512",
     "C:\\Microsoft\\Xamarin\\NuGet\\runtime.fedora.24-x64.runtime.native.system.security.cryptography.openssl\\4.3.0\\runtime.fedora.24-x64.runtime.native.system.security.cryptography.openssl.4.3.0.nupkg.sha512",
@@ -118,7 +119,7 @@
     "C:\\Users\\pervi\\.nuget\\packages\\system.diagnostics.diagnosticsource\\5.0.1\\system.diagnostics.diagnosticsource.5.0.1.nupkg.sha512",
     "C:\\Users\\pervi\\.nuget\\packages\\system.diagnostics.tools\\4.3.0\\system.diagnostics.tools.4.3.0.nupkg.sha512",
     "C:\\Users\\pervi\\.nuget\\packages\\system.diagnostics.tracing\\4.3.0\\system.diagnostics.tracing.4.3.0.nupkg.sha512",
-    "C:\\Users\\pervi\\.nuget\\packages\\system.drawing.common\\4.7.0\\system.drawing.common.4.7.0.nupkg.sha512",
+    "C:\\Users\\pervi\\.nuget\\packages\\system.drawing.common\\5.0.2\\system.drawing.common.5.0.2.nupkg.sha512",
     "C:\\Users\\pervi\\.nuget\\packages\\system.globalization\\4.3.0\\system.globalization.4.3.0.nupkg.sha512",
     "C:\\Users\\pervi\\.nuget\\packages\\system.globalization.calendars\\4.3.0\\system.globalization.calendars.4.3.0.nupkg.sha512",
     "C:\\Users\\pervi\\.nuget\\packages\\system.globalization.extensions\\4.3.0\\system.globalization.extensions.4.3.0.nupkg.sha512",
@@ -186,5 +187,16 @@
     "C:\\Users\\pervi\\.nuget\\packages\\system.xml.xmldocument\\4.3.0\\system.xml.xmldocument.4.3.0.nupkg.sha512",
     "C:\\Users\\pervi\\.nuget\\packages\\system.xml.xmlserializer\\4.3.0\\system.xml.xmlserializer.4.3.0.nupkg.sha512"
   ],
-  "logs": []
+  "logs": [
+    {
+      "code": "NU1701",
+      "level": "Warning",
+      "warningLevel": 1,
+      "message": "Package 'PayPal 1.9.1' was restored using '.NETFramework,Version=v4.6.1, .NETFramework,Version=v4.6.2, .NETFramework,Version=v4.7, .NETFramework,Version=v4.7.1, .NETFramework,Version=v4.7.2, .NETFramework,Version=v4.8' instead of the project target framework '.NETCoreApp,Version=v3.1'. This package may not be fully compatible with your project.",
+      "libraryId": "PayPal",
+      "targetGraphs": [
+        ".NETCoreApp,Version=v3.1"
+      ]
+    }
+  ]
 }

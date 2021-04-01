@@ -7,9 +7,11 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using ArtStudio;
 using ArtStudio.Models;
+using Microsoft.AspNetCore.Authorization;
 
 namespace ArtStudio.Controllers.CRUD
 {
+    [Authorize(Policy = "Admin")]
     public class PackagesController : Controller
     {
         private readonly ApplicationDBContext _context;
@@ -43,28 +45,6 @@ namespace ArtStudio.Controllers.CRUD
             return View(package);
         }
 
-        // GET: Packages/Create
-        public IActionResult Create()
-        {
-            return View();
-        }
-
-        // POST: Packages/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to, for 
-        // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("CountOfDownlaods,Price,Description,Id,DisplayAlias,Enabled,Order")] Package package)
-        {
-            if (ModelState.IsValid)
-            {
-                package.Id = Guid.NewGuid();
-                _context.Add(package);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
-            }
-            return View(package);
-        }
 
         // GET: Packages/Edit/5
         public async Task<IActionResult> Edit(Guid? id)
@@ -116,36 +96,6 @@ namespace ArtStudio.Controllers.CRUD
             }
             return View(package);
         }
-
-        // GET: Packages/Delete/5
-        public async Task<IActionResult> Delete(Guid? id)
-        {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var package = await _context.Packages
-                .FirstOrDefaultAsync(m => m.Id == id);
-            if (package == null)
-            {
-                return NotFound();
-            }
-
-            return View(package);
-        }
-
-        // POST: Packages/Delete/5
-        [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(Guid id)
-        {
-            var package = await _context.Packages.FindAsync(id);
-            _context.Packages.Remove(package);
-            await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
-        }
-
         private bool PackageExists(Guid id)
         {
             return _context.Packages.Any(e => e.Id == id);

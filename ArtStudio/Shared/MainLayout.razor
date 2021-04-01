@@ -112,14 +112,14 @@
 @code{
 
 
-    public Session Session { get; set; }
+    public AppSession Session { get; set; }
     public List<Category> Categories { get; set; }
 
     protected override void OnInitialized()
     {
         Session = SessionService.GetSession();
 
-        Categories = dBContext.Categories.ToList();
+        Categories = dBContext.Categories.OrderBy(c => c.DisplayAlias).ToList();
 
 
     }

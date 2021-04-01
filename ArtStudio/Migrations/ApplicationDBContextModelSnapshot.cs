@@ -136,19 +136,108 @@ namespace ArtStudio.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("DisplayAlias")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<bool>("Enabled")
                         .HasColumnType("bit");
 
-                    b.Property<Guid>("SectionId")
-                        .HasColumnType("uniqueidentifier");
-
                     b.HasKey("Id");
 
-                    b.HasIndex("SectionId");
-
                     b.ToTable("Categories");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = new Guid("ffa7fcb3-c5b7-4c33-ab39-c815d6512384"),
+                            Description = "Цвет — все, но черно-белый — еще больше",
+                            DisplayAlias = "Черно-белая",
+                            Enabled = true
+                        },
+                        new
+                        {
+                            Id = new Guid("1b604960-0fed-43bf-a678-22bf1abc6ccd"),
+                            Description = "Вы наполняете кадр чувствами, энергией, жаждой открытий и риском и оставляете достаточно места, чтобы туда мог попасть кто-нибудь еще",
+                            DisplayAlias = "Рекламная",
+                            Enabled = true
+                        },
+                        new
+                        {
+                            Id = new Guid("0c0c7810-3f94-4e94-8150-b3d5fa20e691"),
+                            Description = "Еще одна невероятная революция произошла в фотографии, но и на нее оказало влияние Концептуальное Искусство",
+                            DisplayAlias = "Концептуальная",
+                            Enabled = true
+                        },
+                        new
+                        {
+                            Id = new Guid("d9e99671-4abe-4f52-a927-8a8b4cf94bc3"),
+                            Description = "Мою жизнь формирует неудержимая потребность странствовать и наблюдать, а мой фотоаппарат — это паспорт",
+                            DisplayAlias = "Туристическая",
+                            Enabled = true
+                        },
+                        new
+                        {
+                            Id = new Guid("a6ee58e3-6aed-4ff5-8730-3195ff7d3bae"),
+                            Description = "Пейзажная фотография переступает все политические и национальные границы, выходит за рамки языковых и культурных ограничений",
+                            DisplayAlias = "Пейзажная",
+                            Enabled = true
+                        },
+                        new
+                        {
+                            Id = new Guid("74499731-a311-4f6a-bf6d-53146dd664bd"),
+                            Description = "Фотография — это кнопка паузы, на которую поставлена жизнь",
+                            DisplayAlias = "Свадебная",
+                            Enabled = true
+                        },
+                        new
+                        {
+                            Id = new Guid("04913a5e-f730-4af9-9936-1ffabcbee704"),
+                            Description = "Фотография уловила факт из жизни, и этот факт будет жить вечно",
+                            DisplayAlias = "Уличная",
+                            Enabled = true
+                        },
+                        new
+                        {
+                            Id = new Guid("98ba11a6-f4e0-4647-aad3-6e547770141b"),
+                            Description = "Фотография - обьяснение вещам",
+                            DisplayAlias = "Спортивная",
+                            Enabled = true
+                        },
+                        new
+                        {
+                            Id = new Guid("1ea41780-d46c-4070-8788-66156c11cd5c"),
+                            Description = "Одно дело — сфотографировать, как человек выглядит, и совсем другое, отобразить, что он из себя представляет",
+                            DisplayAlias = "Портретная",
+                            Enabled = true
+                        },
+                        new
+                        {
+                            Id = new Guid("8f172b25-e93d-49f6-b238-7886d1a40762"),
+                            Description = "Не каждый верит картинам, но фотографиям верят все",
+                            DisplayAlias = "HDR",
+                            Enabled = true
+                        },
+                        new
+                        {
+                            Id = new Guid("94f2d50a-c423-4964-91e1-48c8c941c72d"),
+                            Description = "Важнее вызвать отклик у людей, чем нажать на кнопку затвора",
+                            DisplayAlias = "Фэшн-фотография",
+                            Enabled = true
+                        },
+                        new
+                        {
+                            Id = new Guid("1d6d5cfe-78d1-4d2f-9824-919ac1f2621c"),
+                            Description = "Фотография — это искусство созерцания. Ее суть в том, чтобы найти что-то интересное в обычном месте",
+                            DisplayAlias = "Предметная",
+                            Enabled = true
+                        },
+                        new
+                        {
+                            Id = new Guid("ee9cc6ec-9f0a-41f7-a673-686a9b8e1146"),
+                            Description = "Существуют вещи, которые никто никогда никто не увидел , если бы их не сфотографировали",
+                            DisplayAlias = "Аэрофотография",
+                            Enabled = true
+                        });
                 });
 
             modelBuilder.Entity("ArtStudio.Models.Package", b =>
@@ -164,6 +253,7 @@ namespace ArtStudio.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("DisplayAlias")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<bool>("Enabled")
@@ -178,18 +268,47 @@ namespace ArtStudio.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Packages");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = new Guid("b02ab3da-0719-4846-becc-2a1d32560840"),
+                            CountOfDownlaods = 10,
+                            Description = "Пакет с минимальными возможностями",
+                            DisplayAlias = "Начальный",
+                            Enabled = true,
+                            Order = 1,
+                            Price = 3.0
+                        },
+                        new
+                        {
+                            Id = new Guid("1bde001b-ae80-4a69-bb7f-71ef3e5274e0"),
+                            CountOfDownlaods = 25,
+                            Description = "Средний пакет",
+                            DisplayAlias = "Продвинутый",
+                            Enabled = true,
+                            Order = 2,
+                            Price = 6.0
+                        },
+                        new
+                        {
+                            Id = new Guid("95072784-e133-4fa7-92d1-83bfc684f06f"),
+                            CountOfDownlaods = 35,
+                            Description = "Пакет с максимальными возможностями",
+                            DisplayAlias = "Профи",
+                            Enabled = true,
+                            Order = 3,
+                            Price = 8.0
+                        });
                 });
 
-            modelBuilder.Entity("ArtStudio.Models.PackageInfo", b =>
+            modelBuilder.Entity("ArtStudio.Models.PaymentInfo", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid>("ApplicationUserId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("ApplicationUserId1")
+                    b.Property<string>("ApplicationUserId")
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<int>("CountOfDownload")
@@ -199,6 +318,7 @@ namespace ArtStudio.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("DisplayAlias")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<bool>("Enabled")
@@ -215,11 +335,11 @@ namespace ArtStudio.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("ApplicationUserId1");
+                    b.HasIndex("ApplicationUserId");
 
                     b.HasIndex("PackageId");
 
-                    b.ToTable("PackageInfos");
+                    b.ToTable("PaymentInfos");
                 });
 
             modelBuilder.Entity("ArtStudio.Models.Resource", b =>
@@ -239,6 +359,7 @@ namespace ArtStudio.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("DisplayAlias")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<bool>("Enabled")
@@ -278,6 +399,7 @@ namespace ArtStudio.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("DisplayAlias")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<bool>("Enabled")
@@ -296,42 +418,20 @@ namespace ArtStudio.Migrations
                     b.ToTable("ResourceFiles");
                 });
 
-            modelBuilder.Entity("ArtStudio.Models.Section", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("Description")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("DisplayAlias")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<bool>("Enabled")
-                        .HasColumnType("bit");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Sections");
-                });
-
             modelBuilder.Entity("ArtStudio.Models.UserCartContent", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid>("ApplicationUserId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("ApplicationUserId1")
+                    b.Property<string>("ApplicationUserId")
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("Description")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("DisplayAlias")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<bool>("Enabled")
@@ -342,7 +442,7 @@ namespace ArtStudio.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("ApplicationUserId1");
+                    b.HasIndex("ApplicationUserId");
 
                     b.HasIndex("ResourceId");
 
@@ -460,22 +560,11 @@ namespace ArtStudio.Migrations
                     b.HasDiscriminator().HasValue("Photo");
                 });
 
-            modelBuilder.Entity("ArtStudio.Models.Category", b =>
-                {
-                    b.HasOne("ArtStudio.Models.Section", "Section")
-                        .WithMany()
-                        .HasForeignKey("SectionId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Section");
-                });
-
-            modelBuilder.Entity("ArtStudio.Models.PackageInfo", b =>
+            modelBuilder.Entity("ArtStudio.Models.PaymentInfo", b =>
                 {
                     b.HasOne("ArtStudio.Models.ApplicationUser", "ApplicationUser")
                         .WithMany()
-                        .HasForeignKey("ApplicationUserId1");
+                        .HasForeignKey("ApplicationUserId");
 
                     b.HasOne("ArtStudio.Models.Package", "Package")
                         .WithMany()
@@ -514,7 +603,7 @@ namespace ArtStudio.Migrations
                 {
                     b.HasOne("ArtStudio.Models.ApplicationUser", "ApplicationUser")
                         .WithMany()
-                        .HasForeignKey("ApplicationUserId1");
+                        .HasForeignKey("ApplicationUserId");
 
                     b.HasOne("ArtStudio.Models.Resource", "Resource")
                         .WithMany()

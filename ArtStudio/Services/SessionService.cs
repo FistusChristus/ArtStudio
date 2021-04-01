@@ -8,14 +8,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
-using static ArtStudio.Data.Interfaces.Interfaces;
 
 namespace ArtStudio.Services
 {
 
     public class SessionService
     {
-        private Session session { get; set; }
+        private AppSession session { get; set; }
 
         private readonly ApplicationDBContext dbcontext;
         public bool IsAuthenticated { get; set; }
@@ -23,8 +22,9 @@ namespace ArtStudio.Services
         {
             this.dbcontext = dbcontext;
 
-            session = new Session();
+            session = new AppSession();
             session.User = httpContextAccessor.HttpContext.User;
+            session.HttpContetSession = httpContextAccessor.HttpContext.Session;
             if (session.User.Identity.IsAuthenticated)
             {
                 session.Id = Guid.Parse(GetUserId());
@@ -38,7 +38,7 @@ namespace ArtStudio.Services
            
         }
 
-        public Session GetSession()
+        public AppSession GetSession()
         {
             return session.Id != Guid.Empty ? session : null;
         }
@@ -58,7 +58,7 @@ namespace ArtStudio.Services
         public void RemoveSession(HttpContext context)
         {
            
-            session = new Session();
+            session = new AppSession();
             IsAuthenticated = false;
         }
     }

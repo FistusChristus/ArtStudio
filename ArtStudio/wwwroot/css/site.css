@@ -11,7 +11,12 @@ html, body {
     overflow-x:hidden!important;
     
 }
-
+.mud-card{
+    min-height:456px!important;
+}
+.mud-table-cell{
+    color:rgba(0, 0, 0, 0.80)!important;
+}
 a {
     color: rgba(0, 0, 0, 0.70);
 }

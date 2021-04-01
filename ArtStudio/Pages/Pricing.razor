@@ -21,11 +21,11 @@
             }
             <div class="pricing_card">
                 <div class="pricing_card_header"  style="@IfCenterStyle">@Packages[i].DisplayAlias</div>
-                <div class="pricing_card_cost">@Packages[i].Price грн</div>
+                <div class="pricing_card_cost">@Packages[i].Price $</div>
                 <div class="pricing_card_count">@Packages[i].CountOfDownlaods</div>
                 <div class="pricing_card_count_h">Cкачиваний</div>
                 <div class="d-flex justify-content-center align-items-center">
-                    <a href="/register" class="shine-button " style=" border-color: #ffffff33;">Купить пакет</a>
+                    <a href="/Payment/PaymentWithPaypal/@Packages[i].Id" class="shine-button " style=" border-color: #ffffff33;">Купить пакет</a>
                 </div>
             </div>
         }
