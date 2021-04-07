@@ -11,7 +11,7 @@
 @inject SessionService sessionService
 @inject EntityService entityService
 @inject NavigationManager navigationManager
-<VideoConstructor></VideoConstructor>
+<VideoConstructor Controls="none" Autoplay="autoplay" Loop="loop"></VideoConstructor>
 <div class="index-container">
     <MudGrid Spacing="1">
         @foreach (var item in ResourcesList)

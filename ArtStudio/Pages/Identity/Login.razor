@@ -2,6 +2,7 @@
 
 @using ArtStudio.Models
 @using ArtStudio.Services
+@using Microsoft.AspNetCore.Mvc
 
 @inject NavigationManager NavigationManager
 @inject JSRuntimeService JSRuntimeService
@@ -40,6 +41,12 @@
                 <span class="login100-form-title p-b-34 p-t-27">
                     Вход
                 </span>
+                @if (!String.IsNullOrEmpty(Errors))
+                {
+                    <div class="wrap-input100">
+                        <span class="text-warning">@Errors</span>
+                    </div>
+                }
 
                 <div class="wrap-input100 validate-input" data-validate="Введите Email">
                     <input class="input100" type="text" name="email" @bind-value="loginModel.Email" placeholder="Email">
@@ -77,18 +84,28 @@
 
 @code{
 
+    public string Errors = String.Empty;
     public LoginModel loginModel = new LoginModel() { Email = "kashperuk99@gmail.com", Password = "!Q2w3e4r5t" };
 
     public async void LoginRequest()
     {
+        Errors = "";
         if (!String.IsNullOrEmpty(loginModel.Email) && !String.IsNullOrEmpty(loginModel.Password))
         {
             Response result = await JSRuntimeService.InvokeScript("SendRequest", new { type = "post", url = "/api/user/login", data = loginModel, contentType = "application/json" });
-            if (result.isSuccess)
+
+            if (result.IsSuccess)
             {
                 NavigationManager.NavigateTo("/", true);
             }
+            else
+            {
+                Errors = result.Errors;
+            }
+            this.StateHasChanged();
         }
+        else
+            Errors = "Не заполнены все поля";
     }
 
 }

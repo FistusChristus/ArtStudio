@@ -1,10 +1,11 @@
 ﻿@page "/register"
 @using ArtStudio.Models
 @using ArtStudio.Services
+@using Microsoft.AspNetCore.Mvc
 
 @inject JSRuntimeService JSRuntimeService
 @inject NavigationManager NavigationManager
-
+@inject IJSRuntime JS
 <link rel="icon" type="image/png" href="images/icons/favicon.ico" />
 <!--===============================================================================================-->
 <link rel="stylesheet" type="text/css" href="vendor/bootstrap/css/bootstrap.min.css">
@@ -31,7 +32,6 @@
 <div class="d-flex ca-d-center mt-2 pos-relative" style="width:100%; ">
     <div>
         <div class="wrap-login100">
-            <form class="login100-form validate-form">
                 <span class="login100-form-logo">
                     <i class="zmdi zmdi-landscape"></i>
                 </span>
@@ -39,7 +39,12 @@
                 <span class="login100-form-title p-b-34 p-t-27">
                     Регистрация
                 </span>
-
+                @if (!String.IsNullOrEmpty(Errors))
+                {
+                    <div class="wrap-input100">
+                        <span class="text-warning">@Errors</span>
+                    </div>
+                }
                 <div class="wrap-input100 validate-input" data-validate="Введите Email">
                     <input class="input100" type="text" name="email" @bind-value="registerModel.Email" placeholder="Email">
                     <span class="focus-input100" data-placeholder="&#xf207;"></span>
@@ -55,21 +60,11 @@
                     <span class="focus-input100" data-placeholder="&#xf191;"></span>
                 </div>
 
-                <div class="contact100-form-checkbox">
-                    <input class="input-checkbox100" id="ckb1" type="checkbox" name="remember-me">
-                    <label class="label-checkbox100" for="ckb1">
-                        Запомнить меня
-                    </label>
-                </div>
-
                 <div class="container-login100-form-btn">
                     <button @onclick="RegisterRequest" class="login100-form-btn">
                         Создать аккаунт
                     </button>
                 </div>
-
-
-            </form>
         </div>
     </div>
 </div>
@@ -81,17 +76,24 @@
 
 @code{
     public RegisterModel registerModel = new RegisterModel() { ConfirmPassword = "!Q2w3e4r5t", Email = "kashperuk99@gmail.com", Password = "!Q2w3e4r5t" };
-
+    public string Errors = String.Empty;
 
     public async void RegisterRequest()
     {
+        Errors = "";
         if (!String.IsNullOrEmpty(registerModel.ConfirmPassword) && !String.IsNullOrEmpty(registerModel.Email) && !String.IsNullOrEmpty(registerModel.Password))
         {
             Response result = await JSRuntimeService.InvokeScript("SendRequest", new { type = "post", url = "/api/user/register", data = registerModel, contentType = "application/json" });
-            if (result.isSuccess)
+            if (result.IsSuccess)
             {
                 NavigationManager.NavigateTo("/", true);
             }
+            else
+            {
+                Errors = result.Errors;
+            }
+            this.StateHasChanged();
         }
+       else Errors = "Не заполнены все поля";
     }
 }

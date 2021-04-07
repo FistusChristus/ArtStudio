@@ -1,6 +1,13 @@
 ﻿
 <div class="@ContainerClass" style="width:@Width; height:@Height">
-    <video muted="@Muted" src="@Src" type="@Type" autoplay="@Autoplay" loop="@Loop" controls="@Controls" class="@Class" id="@Id"></video>
+    @if (Controls == "none")
+    {
+        <video muted="@Muted" src="@Src" type="@Type" autoplay="@Autoplay" loop="@Loop" class="@Class" id="@Id"></video>
+    }
+    else
+    {
+        <video muted="@Muted" src="@Src" type="@Type" autoplay="@Autoplay" loop="@Loop" controls="@Controls" class="@Class" id="@Id"></video>
+    }
 </div>
 
 

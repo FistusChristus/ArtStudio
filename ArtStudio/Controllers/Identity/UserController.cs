@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authorization;
 using System.Threading.Tasks;
 using ArtStudio.Services;
-
+using System;
 
 namespace ArtStudio.Controllers.Identity
 {
@@ -28,19 +28,37 @@ namespace ArtStudio.Controllers.Identity
             this.sessionService = sessionService;
 
         }
-        [HttpPost]
+
         [Route("register")]
+        [HttpPost]
         public async Task<Response> Register(RegisterModel model)
         {
+            if (model.ConfirmPassword != model.Password)
+                return new ErrorResponse("Пароли не совпадают");
+            bool isUserExist = await userManager.FindByEmailAsync(model.Email) != null;
+            if (isUserExist)
+                return new ErrorResponse($"Пользователь с именем {model.Email} уже существует");
+            if (!model.Email.Contains("@") || !model.Email.Contains("."))
+                return new ErrorResponse("Не корректный email");
+
             ApplicationUser user = new ApplicationUser { Email = model.Email, UserName = model.Email };
+
             var result = await userManager.CreateAsync(user, model.Password);
             if (result.Succeeded)
             {
                 await signInManager.SignInAsync(user, false);
                 sessionService.SetSession(User, this.HttpContext);
             }
-
-            return new Response(result.Succeeded, null, result.Errors.ToString());
+            else
+            {
+                string errors = "";
+                foreach (var error in result.Errors)
+                {
+                    errors += String.Join('\n', error.Description);
+                }
+                return new ErrorResponse(errors);
+            }
+            return new OkResponse();
         }
 
         [Route("login")]
@@ -52,8 +70,12 @@ namespace ArtStudio.Controllers.Identity
             {
                 sessionService.SetSession(User, this.HttpContext);
             }
-            string error = result.Succeeded ? "" : "Неверный логин или пароль";
-            return new Response(result.Succeeded, null, error);
+            else
+            {
+                string error = result.Succeeded ? "" : "Неверный логин или пароль";
+                return new ErrorResponse(error);
+            }
+            return new OkResponse();
         }
 
         [Route("logout")]
@@ -62,7 +84,7 @@ namespace ArtStudio.Controllers.Identity
         {
             await signInManager.SignOutAsync();
             sessionService.RemoveSession(this.HttpContext);
-            return new Response(true, null, null);
+            return new OkResponse();
         }
     }
 }

@@ -146,7 +146,7 @@ namespace ArtStudio.PaymentData
             }
             await AfterSuccessPayment();
 
-            return LocalRedirect("/profile");
+            return LocalRedirect("/pricing/true");
         }
         private async Task AfterSuccessPayment()
         {

@@ -1,4 +1,5 @@
 ﻿@page "/pricing"
+@page "/pricing/{congrats}"
 @using ArtStudio.Models
 @using ArtStudio.Services
 
@@ -6,34 +7,49 @@
 
 <div class="identity_bg ">
 </div>
-<div class="d-flex justify-content-center align-items-center" style="width:100%; height:100vh">
-    <div class="pricing_container">
-        @for (int i = 0; i < Packages.Count; i++)
-        {
-            string IfCenterStyle = "";
-            if (i == 1)
-            {
-                IfCenterStyle = "background-color: #9184ef;";
-            }
-            else
-            {
-                IfCenterStyle = "";
-            }
-            <div class="pricing_card">
-                <div class="pricing_card_header"  style="@IfCenterStyle">@Packages[i].DisplayAlias</div>
-                <div class="pricing_card_cost">@Packages[i].Price $</div>
-                <div class="pricing_card_count">@Packages[i].CountOfDownlaods</div>
-                <div class="pricing_card_count_h">Cкачиваний</div>
-                <div class="d-flex justify-content-center align-items-center">
-                    <a href="/Payment/PaymentWithPaypal/@Packages[i].Id" class="shine-button " style=" border-color: #ffffff33;">Купить пакет</a>
-                </div>
-            </div>
-        }
 
+<div class="d-flex w-100" style="flex-direction:column">
+    <div style="width:100%; text-align:center; display:block;" class="mt-5 mb-5">
+        @if (Congrats == "congrats")
+        {
+
+            <h1 class="scale-in-hor-center" style="color:#00ff90">Спасибо за вашу покупку!</h1>
+        }
+    </div>
+    <div class="d-flex justify-content-center align-items-center" style="width:100%; height:100vh">
+
+        <div class="pricing_container">
+
+            @for (int i = 0; i < Packages.Count; i++)
+            {
+                string IfCenterStyle = "";
+                if (i == 1)
+                {
+                    IfCenterStyle = "background-color: #9184ef;";
+                }
+                else
+                {
+                    IfCenterStyle = "";
+                }
+                <div class="pricing_card">
+                    <div class="pricing_card_header" style="@IfCenterStyle">@Packages[i].DisplayAlias</div>
+                    <div class="pricing_card_cost">@Packages[i].Price $</div>
+                    <div class="pricing_card_count">@Packages[i].CountOfDownlaods</div>
+                    <div class="pricing_card_count_h">Cкачиваний</div>
+                    <div class="d-flex justify-content-center align-items-center">
+                        <a href="/Payment/PaymentWithPaypal/@Packages[i].Id" class="shine-button " style=" border-color: #ffffff33;">Купить пакет</a>
+                    </div>
+                </div>
+            }
+
+        </div>
     </div>
 </div>
+
 @code{
     public List<Package> Packages { get; set; }
+    [Parameter]
+    public string Congrats { get; set; }
 
 
     protected override void OnInitialized()

@@ -6,7 +6,7 @@
 @using MudBlazor
 @using ArtStudio.Models
 @using System.Linq
-@using Microsoft.EntityFrameworkCore;
+@using Microsoft.AspNetCore.Mvc;
 @inject ApplicationDBContext dBContext
 @inject SessionService SessionService
 @inject EntityService entityService
@@ -175,7 +175,7 @@
     public async void LogOut()
     {
         Response result = await JSRuntimeService.InvokeScript("SendRequest", new { type = "post", url = "/api/user/logout", data = "", contentType = "application/json" });
-        if (result.isSuccess)
+        if (result!=null)
         {
             NavigationManager.NavigateTo("/", true);
         }

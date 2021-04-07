@@ -6,8 +6,10 @@ function SendRequest(data) {
         data: JSON.stringify(data.data),
         contentType: data.contentType
     }).done(function (result) {
+        console.log(result);
         return result;
     }).fail(function (result) {
+        console.log(result);
         return result;
     });
 }
